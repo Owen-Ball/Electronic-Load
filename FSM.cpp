@@ -1,0 +1,146 @@
+#include "FSM.h"
+#include "IO.h"
+
+MODE SYSTEM_MODE;
+CURRENT_LIMIT SYSTEM_CURRENT;
+OUT_STATE SYSTEM_OUTPUT;
+float SYSTEM_SETPOINT;
+float CURRENT_SET;
+float V_READING;
+float I_READING;
+long OUT_KILL_TIMER;
+
+void initSystem() {
+  SYSTEM_MODE = CC;
+  SYSTEM_CURRENT = CURR_LOW;
+  SYSTEM_OUTPUT = OUT_OFF;
+  SYSTEM_SETPOINT = 0.0;
+  CURRENT_SET = 0.0;
+  OUT_KILL_TIMER = millis();
+}
+
+
+void updateSystem() {
+  updateMode();
+  updateOutput();
+  updateCurrentLimit();
+  updateSetpoint();
+  updateCurrent();
+}
+
+void updateMode() {
+  bool update_mode = mode_button.pressed();
+  switch (SYSTEM_MODE) {
+    case CC:
+      if (update_mode) {
+        SYSTEM_OUTPUT = OUT_OFF;
+        SYSTEM_MODE = CP;
+      }
+      break;
+    case CP:
+      if (update_mode) {
+        SYSTEM_OUTPUT = OUT_OFF;
+        SYSTEM_MODE = CR;
+      }
+      break;
+    case CR:
+      if (update_mode) {
+        SYSTEM_OUTPUT = OUT_OFF;
+        SYSTEM_MODE = CV;
+      }
+      break;
+    case CV:
+      if (update_mode) {
+        SYSTEM_OUTPUT = OUT_OFF;
+        SYSTEM_MODE = CC;
+      }
+      break;
+    default:
+      SYSTEM_OUTPUT = OUT_OFF;
+      SYSTEM_MODE = CC;
+      
+  }
+}
+
+void updateOutput() {
+  if (enable_button.pressed()) {
+    if (SYSTEM_OUTPUT == OUT_ON) {
+      SYSTEM_OUTPUT = OUT_OFF;
+    } else {
+      SYSTEM_OUTPUT = OUT_ON;
+      OUT_KILL_TIMER = millis();
+    }
+  }
+}
+
+void updateCurrentLimit() {
+  if (current_button.pressed()) {
+    DEBUG_PRINTLN("CURRENT LIMIT CHANGED");
+    if (SYSTEM_CURRENT == CURR_LOW) {
+      SYSTEM_CURRENT = CURR_HIGH;
+    } else {
+      SYSTEM_CURRENT = CURR_LOW;
+    }
+  }
+}
+
+void updateSetpoint() {
+
+  SYSTEM_SETPOINT = updateEncoder(SYSTEM_SETPOINT);
+  //Limit values to min/max setpoints
+  switch (SYSTEM_MODE) {
+    case CC:
+      if (SYSTEM_CURRENT == CURR_LOW) {
+        SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_CURRENT_LOW_SET);
+      } else {
+        SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_CURRENT_HIGH_SET);
+      }
+      break;
+    case CP:
+      SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_POWER_SET);
+      break;
+    case CR:
+      SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, MIN_RESISTANCE_SET, MAX_RESISTANCE_SET);
+      break;
+    case CV:
+      SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_VOLTAGE_SET);
+      break; 
+  }
+}
+
+void updateCurrent() {
+  //Serial.println(SYSTEM_OUTPUT);
+  Serial.println(millis() - OUT_KILL_TIMER);
+  long timer = millis() - OUT_KILL_TIMER;
+  if (SYSTEM_SETPOINT < .75*I_READING || SYSTEM_SETPOINT > 1.25*I_READING) {
+    if (timer > OUT_KILL_TIME_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
+  } else {
+    OUT_KILL_TIMER = millis();
+  }
+  
+  if (SYSTEM_OUTPUT == OUT_OFF) {
+    CURRENT_SET = 0;
+    setDAC(0, SYSTEM_CURRENT);
+  } else {
+    setCurrent();
+  }
+}
+
+void readVandI() {
+  I_READING = readCurrent(SYSTEM_CURRENT);
+  V_READING = readVoltage();
+
+  //There is around 8-12mA of leakage current even when the output is off
+  //This is not able to be measured by the current sensor bc it flows through a different path
+  //Therefore we don't know if this current is flowing or not (ie if a source is connected)
+  //So we assume if there is almost no voltage measured, there is nothing connected
+  if (V_READING < .01) I_READING = 0.0;
+}
+
+void setCurrent() {
+  //Adjusts the value the DAC is set to depending on the measured error
+  CURRENT_SET += 0.75*(SYSTEM_SETPOINT - I_READING);
+  //CURRENT_SET = SYSTEM_SETPOINT;
+  setDAC(CURRENT_SET, SYSTEM_CURRENT);
+  limitFloat(CURRENT_SET, 0.0, 1.5*(SYSTEM_CURRENT == CURR_HIGH)?CURRENT_HIGH_LIMIT:CURRENT_LOW_LIMIT);
+}
