@@ -1,18 +1,23 @@
 #include "FSM.h"
 #include "IO.h"
+#include "helpers.h"
 
 MODE SYSTEM_MODE;
 CURRENT_LIMIT SYSTEM_CURRENT;
 OUT_STATE SYSTEM_OUTPUT;
 float SYSTEM_SETPOINT;
+
+//What the DAC is actually set to. Updated via feedback
 float CURRENT_SET;
+//Stores the set or calculated current target
+float SYSTEM_CURRENT_SETPOINT;
 float V_READING;
 float I_READING;
 long OUT_KILL_TIMER;
 
 void initSystem() {
   SYSTEM_MODE = CC;
-  SYSTEM_CURRENT = CURR_LOW;
+  SYSTEM_CURRENT = CURR_HIGH;
   SYSTEM_OUTPUT = OUT_OFF;
   SYSTEM_SETPOINT = 0.0;
   CURRENT_SET = 0.0;
@@ -21,11 +26,14 @@ void initSystem() {
 
 
 void updateSystem() {
+  readVandI();
+  runFan();
   updateMode();
   updateOutput();
   updateCurrentLimit();
   updateSetpoint();
-  updateCurrent();
+  runMode();
+  //updateCurrent();
 }
 
 void updateMode() {
@@ -108,11 +116,42 @@ void updateSetpoint() {
   }
 }
 
+void runMode() {
+    switch (SYSTEM_MODE) {
+      case CC:
+        runCC();
+        break;
+      case CP:
+        runCP();
+        break;
+      case CR:
+        runCR();
+        break;
+      case CV:
+        break; 
+    }
+}
+
+void runCC() {
+  SYSTEM_CURRENT_SETPOINT = SYSTEM_SETPOINT;
+  updateCurrent();  
+}
+
+void runCP() {
+  SYSTEM_CURRENT_SETPOINT = SYSTEM_SETPOINT / V_READING;
+  updateCurrent();  
+}
+
+void runCR() {
+  SYSTEM_CURRENT_SETPOINT = V_READING / SYSTEM_SETPOINT;
+  updateCurrent();  
+}
+
 void updateCurrent() {
   //Serial.println(SYSTEM_OUTPUT);
   Serial.println(millis() - OUT_KILL_TIMER);
   long timer = millis() - OUT_KILL_TIMER;
-  if (SYSTEM_SETPOINT < .75*I_READING || SYSTEM_SETPOINT > 1.25*I_READING) {
+  if (SYSTEM_CURRENT_SETPOINT < .75*I_READING || SYSTEM_CURRENT_SETPOINT > 1.25*I_READING) {
     if (timer > OUT_KILL_TIME_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
   } else {
     OUT_KILL_TIMER = millis();
@@ -122,6 +161,8 @@ void updateCurrent() {
     CURRENT_SET = 0;
     setDAC(0, SYSTEM_CURRENT);
   } else {
+    //Adjusts the value the DAC is set to depending on the measured error
+    CURRENT_SET += 0.75*(SYSTEM_CURRENT_SETPOINT - I_READING);
     setCurrent();
   }
 }
@@ -138,9 +179,7 @@ void readVandI() {
 }
 
 void setCurrent() {
-  //Adjusts the value the DAC is set to depending on the measured error
-  CURRENT_SET += 0.75*(SYSTEM_SETPOINT - I_READING);
-  //CURRENT_SET = SYSTEM_SETPOINT;
-  setDAC(CURRENT_SET, SYSTEM_CURRENT);
   limitFloat(CURRENT_SET, 0.0, 1.5*(SYSTEM_CURRENT == CURR_HIGH)?CURRENT_HIGH_LIMIT:CURRENT_LOW_LIMIT);
+  setDAC(CURRENT_SET, SYSTEM_CURRENT);
+  
 }

@@ -108,9 +108,9 @@ void runFan() {
   float dutyCycle = 0;
   float temp = readThermistor();
 
-  //25C = 0% fan, 50C = 100% fan
-  dutyCycle = (temp - 25.0) * 4.0;
-  //dutyCycle = limitFloat(dutyCycle, 0.0, 100.0);
+  //25C = 0% fan, 40C = 100% fan
+  dutyCycle = (temp - 25.0) * 100.0/15.0;
+  dutyCycle = limitFloat(dutyCycle, 0.0, 100.0);
 
   setFan(dutyCycle);
   

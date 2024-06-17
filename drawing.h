@@ -41,4 +41,6 @@ void printCurrent(float i);
 
 void drawOutputState();
 
+void drawAll();
+
 #endif // _DRAWING_

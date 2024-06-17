@@ -36,25 +36,13 @@ void setup() {
   current_button.begin();
 
   initSystem();
-  SYSTEM_CURRENT = CURR_HIGH;
-  SYSTEM_OUTPUT = OUT_ON;
   
   coolingFan = new ESP32_FAST_PWM(FAN_PIN, PWM_FREQ, 0.0f, PWM_CHANNEL, PWM_RES);
   
 }
 
 void loop() {
-  
-  drawOutputState();
-  readVandI();
-  printSetpoint(SYSTEM_SETPOINT, digit);
-  printVoltage(V_READING);
-  //setFan(25.0);
-  runFan();
-  printCurrent(I_READING);
-
+  drawAll();
   updateSystem();
-
-
   
 }

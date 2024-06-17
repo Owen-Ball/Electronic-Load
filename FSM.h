@@ -2,6 +2,7 @@
 #define _FSM_
 
 #include "IO.h"
+#include "helpers.h"
 
 extern MODE SYSTEM_MODE;
 extern CURRENT_LIMIT SYSTEM_CURRENT;
@@ -21,7 +22,10 @@ void updateCurrentLimit();
 void updateSetpoint();
 void updateCurrent();
 
-float limitFloat(float val, float val_min, float val_max);
+void runMode();
+void runCC();
+void runCP();
+void runCR();
 
 void readVandI();
 void setCurrent();

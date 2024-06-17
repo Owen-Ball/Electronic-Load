@@ -22,7 +22,7 @@ void floatToString(float f, char* s) {
   s[5] = '\0';
 }
 
-void printSetpoint(float s, uint8_t digit) {
+void printSetpoint(float setpoint, uint8_t digit) {
   char mode_text[20];
   char unit;
   switch (SYSTEM_MODE) {
@@ -52,10 +52,9 @@ void printSetpoint(float s, uint8_t digit) {
     omega_drawn = false;
   }
   mode_text[4] = '\0';
-  //if (s < 0) s = 0.0;
   tft.setTextColor(TFT_YELLOW);
   Setpoint.setTextColor(TFT_YELLOW, TFT_BLACK);
-  floatToString(s, f_to_s_buffer);
+  floatToString(setpoint, f_to_s_buffer);
   f_to_s_buffer[5] = unit;
   f_to_s_buffer[6] = '\0';
   
@@ -64,7 +63,7 @@ void printSetpoint(float s, uint8_t digit) {
   Setpoint.print(mode_text);
 
   int blanks;
-  int modlog = modifiedLog(s);
+  int modlog = modifiedLog(setpoint);
   if (3 - digit > modlog) blanks = 3 - digit + 1;
   else blanks = 3 - digit;
   for (int i = 0; i < 9; i++) {
@@ -130,4 +129,11 @@ void drawOutputState() {
   output_sprite.pushSprite(280, 200, TFT_TRANSPARENT);
   output_sprite.deleteSprite();
   
+}
+
+void drawAll() {
+  drawOutputState();
+  printSetpoint(SYSTEM_SETPOINT, digit);
+  printVoltage(V_READING);
+  printCurrent(I_READING);
 }
