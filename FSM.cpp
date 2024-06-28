@@ -142,15 +142,25 @@ void runCC() {
 }
 
 
-//************************************************************TODO FIX DIVIDE BY 0 AND MAKE CONSTANTS
+//************************************************************TODO MAKE CONSTANTS
 void runCP() {
-  SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*SYSTEM_SETPOINT / V_READING;
-  updateCurrent();  
+  if (V_READING == 0) {
+    //Avoid a divide by 0
+    SYSTEM_OUTPUT = OUT_OFF;
+  } else {
+    SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*SYSTEM_SETPOINT / V_READING;
+    updateCurrent();
+  }  
 }
 
 void runCR() {
-  SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*V_READING / SYSTEM_SETPOINT;
-  updateCurrent();  
+  if (SYSTEM_SETPOINT == 0) {
+    //should never hit this case bc of the limits on the setpoint, but still good to check 
+    SYSTEM_OUTPUT = OUT_OFF;
+  } else {
+    SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*V_READING / SYSTEM_SETPOINT;
+    updateCurrent();  
+  }
 }
 
 void updateCurrent() {
@@ -168,7 +178,7 @@ void updateCurrent() {
     setDAC(0, SYSTEM_CURRENT);
   } else {
     //Adjusts the value the DAC is set to depending on the measured error
-    CURRENT_SET += 0.75*(SYSTEM_CURRENT_SETPOINT - I_READING);
+    CURRENT_SET += CURRENT_SET_GAIN*(SYSTEM_CURRENT_SETPOINT - I_READING);
     setCurrent();
   }
 }

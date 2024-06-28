@@ -5,7 +5,6 @@ enum OUT_STATE {OUT_ON, OUT_OFF};
 enum MODE {CC, CV, CP, CR, None};
 enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
-
 //Setpoint Bounds
 #define MAX_CURRENT_LOW_SET   1.50
 #define MAX_CURRENT_HIGH_SET  7.50
@@ -20,6 +19,7 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define VOLTAGE_LIMIT         35.00
 #define POWER_LIMIT           120.0
 
+//Pins
 #define FAN_PIN               11
 #define PWM_RES               10
 #define PWM_FREQ              20000
@@ -38,27 +38,49 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define CURRSENSE_SMALL       5
 #define THERMISTOR_PIN        8
 
-#define DEBOUNCE_TIME_MS      50
-#define BUTTON_AVG_COUNT      10
-
-#define V_THRESH_LOW          11.0
-#define V_THRESH_HIGH         12.0
-
-#define C_THRESH_LOW          0.7
-#define C_THRESH_HIGH         0.8
-
-
 #define DAC_SDA               10
 #define DAC_SCL               9
 
+//debounce time for all I/O buttons
+#define DEBOUNCE_TIME_MS      50
+//Takes N digital readings of each button, all must agree for output state to toggle
+//This was implemented to solve an infrequent issue where the current limit would randomly update due to
+//digitalRead of the button returning the wrong value
+#define BUTTON_AVG_COUNT      10
+
+//Below this voltage the low voltage sensor will be used
+#define V_THRESH_LOW          11.0
+//Above this voltage the high voltage sensor will be used
+//Between them the previous sensor is used
+#define V_THRESH_HIGH         12.0
+
+//On the high current setting, below this current the low current sensor is used
+#define C_THRESH_LOW          0.7
+//On the high current setting, above this current, the high current sensor is used
+#define C_THRESH_HIGH         0.8
+
+
+//defines how long the current can be outside of 25% of the setpoint before being cut (ms)
 #define OUT_KILL_TIME_LIMIT   500
 
+//Vertical spacing between lines
 #define LETTER_HEIGHT         50
+//defines the x coordinate of the left of the numbers
 #define LETTER_X              45
+//defines the y coordiante of the top of the numbers
 #define LETTER_Y              50
 
+//sets the IIR filter used on values before displaying them. 
+//Only impacts the displayed values, not the values used in control loops and such
+//0 = no filter, -> 1 = high filtering
 #define MEASUREMENT_FILTER    .75
+//Will skip filtering and directly set the measured value if the filtered value has a percent error
+//greater than the below value. Makes output responsive to large steps
 #define FILTER_THRESHOLD      .02
+
+//sets the gain of the integral controller for current setpoint
+//1 or above likely to cause oscillations
+#define CURRENT_SET_GAIN      .8
 
 
 #endif // _CONSTANTS_
