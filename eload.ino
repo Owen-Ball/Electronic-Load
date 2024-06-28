@@ -5,6 +5,8 @@
 #include "helpers.h"
 #include "FSM.h"
 
+long prevtime;
+
 void setup() {
   
   pinMode(VSENSE_LARGE, INPUT);
@@ -38,11 +40,15 @@ void setup() {
   initSystem();
   
   coolingFan = new ESP32_FAST_PWM(FAN_PIN, PWM_FREQ, 0.0f, PWM_CHANNEL, PWM_RES);
+
+  prevtime = millis();
   
 }
 
 void loop() {
   drawAll();
   updateSystem();
-  
+
+  Serial.println(millis() - prevtime);
+  prevtime = millis();
 }

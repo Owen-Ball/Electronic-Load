@@ -17,9 +17,9 @@ extern TFT_eSprite output_sprite;
 extern FlickerFreePrint<TFT_eSPI> Voltage;
 extern FlickerFreePrint<TFT_eSPI> Current;
 extern FlickerFreePrint<TFT_eSPI> Setpoint;
+extern FlickerFreePrint<TFT_eSPI> Power;
 extern FlickerFreePrint<TFT_eSPI> Cursor;
 extern char f_to_s_buffer[20];
-
 
 //Draw the wifi symbol at provided coordinates
 void drawWifi();
@@ -38,6 +38,9 @@ void printVoltage(float v);
 
 //Print the measured current
 void printCurrent(float i);
+
+//Print the measured power
+void printPower(float i);
 
 void drawOutputState();
 

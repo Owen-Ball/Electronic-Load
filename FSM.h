@@ -13,6 +13,9 @@ extern float CURRENT_SET;
 extern float V_READING;
 extern float I_READING;
 
+extern float filtered_voltage;
+extern float filtered_current;
+
 void initSystem();
 void updateSystem();
 
@@ -29,5 +32,7 @@ void runCR();
 
 void readVandI();
 void setCurrent();
+
+void filterMeasurements(float v, float i);
 
 #endif // _FSM_

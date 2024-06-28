@@ -15,6 +15,9 @@ float V_READING;
 float I_READING;
 long OUT_KILL_TIMER;
 
+float filtered_voltage = 0;
+float filtered_current = 0;
+
 void initSystem() {
   SYSTEM_MODE = CC;
   SYSTEM_CURRENT = CURR_HIGH;
@@ -33,6 +36,7 @@ void updateSystem() {
   updateCurrentLimit();
   updateSetpoint();
   runMode();
+  filterMeasurements(V_READING, I_READING);
   //updateCurrent();
 }
 
@@ -137,13 +141,15 @@ void runCC() {
   updateCurrent();  
 }
 
+
+//************************************************************TODO FIX DIVIDE BY 0 AND MAKE CONSTANTS
 void runCP() {
-  SYSTEM_CURRENT_SETPOINT = SYSTEM_SETPOINT / V_READING;
+  SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*SYSTEM_SETPOINT / V_READING;
   updateCurrent();  
 }
 
 void runCR() {
-  SYSTEM_CURRENT_SETPOINT = V_READING / SYSTEM_SETPOINT;
+  SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*V_READING / SYSTEM_SETPOINT;
   updateCurrent();  
 }
 
@@ -182,4 +188,23 @@ void setCurrent() {
   limitFloat(CURRENT_SET, 0.0, 1.5*(SYSTEM_CURRENT == CURR_HIGH)?CURRENT_HIGH_LIMIT:CURRENT_LOW_LIMIT);
   setDAC(CURRENT_SET, SYSTEM_CURRENT);
   
+}
+
+void filterMeasurements(float v, float i) {
+  float v_error;
+  if (v == 0) v_error = 0;
+  else v_error = abs((v - filtered_voltage) / v);
+  if (v_error < FILTER_THRESHOLD) {
+    filtered_voltage = MEASUREMENT_FILTER*filtered_voltage + (1 - MEASUREMENT_FILTER)*v;
+  } else {
+    filtered_voltage = v;
+  }
+  float i_error;
+  if (i == 0) i_error = 0;
+  else i_error = abs((i - filtered_current) / i);
+  if (i_error < FILTER_THRESHOLD) {
+    filtered_current = MEASUREMENT_FILTER*filtered_current + (1 - MEASUREMENT_FILTER)*i;
+  } else {
+    filtered_current = i;
+  }
 }

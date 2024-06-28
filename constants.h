@@ -53,6 +53,12 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
 #define OUT_KILL_TIME_LIMIT   500
 
+#define LETTER_HEIGHT         50
+#define LETTER_X              45
+#define LETTER_Y              50
+
+#define MEASUREMENT_FILTER    .75
+#define FILTER_THRESHOLD      .02
 
 
 #endif // _CONSTANTS_

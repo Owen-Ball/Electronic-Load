@@ -1,4 +1,6 @@
 #include "Arduino.h"
+
+//This version of button is modified. I should put the code into this folder
 #include <Button.h>
 #include "constants.h"
 #include "IO.h"
@@ -137,7 +139,7 @@ float readVoltage() {
 }
 
 float readVoltageLarge() {
-  float raw = analogReadAverage(VSENSE_LARGE, 500);
+  float raw = analogReadAverage(VSENSE_LARGE, 200);
   return pow(raw, 10)*-1.84897E-33 + \
   pow(raw, 9) *-1.62828E-29 + \
   pow(raw, 8) * 4.62921E-25 + \
@@ -154,7 +156,7 @@ float readVoltageLarge() {
 
 
 float readVoltageSmall() {
-  float raw = analogReadAverage(VSENSE_SMALL, 500);
+  float raw = analogReadAverage(VSENSE_SMALL, 200);
   return pow(raw, 10)*-8.61993E-34 + \
   pow(raw, 9) * 1.88324E-29 + \
   pow(raw, 8) *-1.79139E-25 + \
@@ -190,7 +192,7 @@ float readCurrent(CURRENT_LIMIT SYSTEM_CURRENT) {
 
 
 float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT) {
-  float raw = analogReadAverage(CURRSENSE_LARGE, 500);
+  float raw = analogReadAverage(CURRSENSE_LARGE, 200);
   if (SYSTEM_CURRENT == CURR_HIGH) {
     float val =  pow(raw, 10)*-2.497340E-32 + \
     pow(raw, 9) * 3.86037E-28 + \
@@ -215,7 +217,7 @@ float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT) {
 
 
 float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT) {
-  float raw = analogReadAverage(CURRSENSE_SMALL, 500);
+  float raw = analogReadAverage(CURRSENSE_SMALL, 200);
   if (SYSTEM_CURRENT == CURR_HIGH) {
     float val =  pow(raw, 10)*-3.81452E-34 + \
     pow(raw, 9) * 7.39220E-30 + \
@@ -236,7 +238,7 @@ float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT) {
 }
 
 float readThermistor() {
-  float raw = analogReadAverage(THERMISTOR_PIN, 50);
+  float raw = analogReadAverage(THERMISTOR_PIN, 20);
   return pow(raw, 3) * 6.57E-9 + \
          pow(raw, 2) *-4.54E-5 + \
          raw         * 0.127   + \
