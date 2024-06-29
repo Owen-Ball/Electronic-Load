@@ -1,6 +1,7 @@
 #ifndef _SYMBOLS_
 #define _SYMBOLS_
 
+//Font library doesn't have Omega so it is loaded into a sprite as an image and displayed
 const uint16_t ohmWidth = 28;
 const uint16_t ohmHeight = 36;
 

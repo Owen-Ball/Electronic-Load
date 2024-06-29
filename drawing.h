@@ -42,8 +42,10 @@ void printCurrent(float i);
 //Print the measured power
 void printPower(float i);
 
+//Draws an indicator of if the system output is on or off
 void drawOutputState();
 
+//Runs all drawing functions
 void drawAll();
 
 #endif // _DRAWING_

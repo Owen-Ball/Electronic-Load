@@ -132,6 +132,7 @@ void runMode() {
         runCR();
         break;
       case CV:
+        runCV();
         break; 
     }
 }
@@ -163,9 +164,12 @@ void runCR() {
   }
 }
 
-void updateCurrent() {
-  //Serial.println(SYSTEM_OUTPUT);
-  Serial.println(millis() - OUT_KILL_TIMER);
+void runCV() {
+  SYSTEM_OUTPUT = OUT_OFF;
+  updateCurrent();  
+}
+
+void updateCurrent() {;
   long timer = millis() - OUT_KILL_TIMER;
   if (SYSTEM_CURRENT_SETPOINT < .75*I_READING || SYSTEM_CURRENT_SETPOINT > 1.25*I_READING) {
     if (timer > OUT_KILL_TIME_LIMIT) SYSTEM_OUTPUT = OUT_OFF;

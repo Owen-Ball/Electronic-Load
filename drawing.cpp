@@ -16,6 +16,7 @@ FlickerFreePrint<TFT_eSPI> Cursor(&tft, TFT_WHITE, TFT_BLACK);
 
 bool isdef_wifi_sprite = false;
 bool omega_drawn = false;
+long lastRefresh = 0;
 
 void floatToString(float f, char* s) {  
   dtostrf(f, -1, 3-modifiedLog(f), s);
@@ -143,11 +144,12 @@ void drawOutputState() {
   
 }
 
-
 void drawAll() {
+  if (millis() - lastRefresh < SCREEN_REFRESH) return;
   drawOutputState();
   printSetpoint(SYSTEM_SETPOINT, digit);
   printVoltage(filtered_voltage);
   printCurrent(filtered_current);
   printPower(V_READING*I_READING);
+  lastRefresh = millis();
 }

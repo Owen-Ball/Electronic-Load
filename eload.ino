@@ -4,6 +4,7 @@
 #include "IO.h"
 #include "helpers.h"
 #include "FSM.h"
+#include "debug_utils.h"
 
 long prevtime;
 
@@ -49,6 +50,6 @@ void loop() {
   drawAll();
   updateSystem();
 
-  Serial.println(millis() - prevtime);
+  DEBUG_PRINTLN(millis() - prevtime);
   prevtime = millis();
 }
