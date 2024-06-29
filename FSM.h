@@ -29,6 +29,7 @@ void runMode();
 void runCC();
 void runCP();
 void runCR();
+void runCV();
 
 void readVandI();
 void setCurrent();
