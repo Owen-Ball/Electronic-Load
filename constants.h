@@ -82,6 +82,9 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //1 or above likely to cause oscillations
 #define CURRENT_SET_GAIN      .8
 
+//Filters how fast the set current can change for CR, CP, CV
+#define CURRENT_SET_FILTER    .75
+
 //time in ms between screen updates
 #define SCREEN_REFRESH        75
 

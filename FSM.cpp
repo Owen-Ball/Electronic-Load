@@ -143,13 +143,12 @@ void runCC() {
 }
 
 
-//************************************************************TODO MAKE CONSTANTS
 void runCP() {
   if (V_READING == 0) {
     //Avoid a divide by 0
     SYSTEM_OUTPUT = OUT_OFF;
   } else {
-    SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*SYSTEM_SETPOINT / V_READING;
+    SYSTEM_CURRENT_SETPOINT = CURRENT_SET_FILTER*SYSTEM_CURRENT_SETPOINT + (1-CURRENT_SET_FILTER)*SYSTEM_SETPOINT / V_READING;
     updateCurrent();
   }  
 }
@@ -159,7 +158,7 @@ void runCR() {
     //should never hit this case bc of the limits on the setpoint, but still good to check 
     SYSTEM_OUTPUT = OUT_OFF;
   } else {
-    SYSTEM_CURRENT_SETPOINT = .75*SYSTEM_CURRENT_SETPOINT + .25*V_READING / SYSTEM_SETPOINT;
+    SYSTEM_CURRENT_SETPOINT = CURRENT_SET_FILTER*SYSTEM_CURRENT_SETPOINT + (1-CURRENT_SET_FILTER)*V_READING / SYSTEM_SETPOINT;
     updateCurrent();  
   }
 }
