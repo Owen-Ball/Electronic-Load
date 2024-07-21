@@ -37,13 +37,11 @@ void setup() {
   enable_button.begin();
   mode_button.begin();
   current_button.begin();
-
-  initSystem();
-  
   coolingFan = new ESP32_FAST_PWM(FAN_PIN, PWM_FREQ, 0.0f, PWM_CHANNEL, PWM_RES);
 
+  initSystem();
+
   prevtime = millis();
-  
 }
 
 void loop() {

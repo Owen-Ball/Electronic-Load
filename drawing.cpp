@@ -7,6 +7,8 @@
 TFT_eSPI tft = TFT_eSPI();
 TFT_eSprite wifi_sprite = TFT_eSprite(&tft);
 TFT_eSprite output_sprite = TFT_eSprite(&tft);
+TFT_eSprite blank_sprite = TFT_eSprite(&tft);
+
 char f_to_s_buffer[20];
 FlickerFreePrint<TFT_eSPI> Voltage(&tft, TFT_WHITE, TFT_BLACK);
 FlickerFreePrint<TFT_eSPI> Current(&tft, TFT_WHITE, TFT_BLACK);
@@ -16,6 +18,7 @@ FlickerFreePrint<TFT_eSPI> Cursor(&tft, TFT_WHITE, TFT_BLACK);
 
 bool isdef_wifi_sprite = false;
 bool omega_drawn = false;
+bool displayingPower = false;
 long lastRefresh = 0;
 
 void floatToString(float f, char* s) {  
@@ -42,6 +45,10 @@ void printSetpoint(float setpoint, uint8_t digit) {
     break;
   case CV:
     strncpy(mode_text, "CV: ", 4);
+    unit = 'V';
+    break;
+  case BAT:
+    strncpy(mode_text, "BT: ", 4);
     unit = 'V';
     break;
   }
@@ -81,8 +88,8 @@ void printSetpoint(float setpoint, uint8_t digit) {
 
 void printVoltage(float v) {
   if (v < 0) v = 0.0;
-  tft.setTextColor(TFT_YELLOW);
-  Voltage.setTextColor(TFT_YELLOW, TFT_BLACK);
+  tft.setTextColor(TFT_RED);
+  Voltage.setTextColor(TFT_RED, TFT_BLACK);
   floatToString(v, f_to_s_buffer);
   tft.setCursor(LETTER_X, LETTER_Y + LETTER_HEIGHT);
   tft.print("V: ");
@@ -92,8 +99,8 @@ void printVoltage(float v) {
 
 void printCurrent(float i) {
   if (i < 0) i = 0.0;
-  Current.setTextColor(TFT_RED, TFT_BLACK);
-  tft.setTextColor(TFT_RED);
+  Current.setTextColor(TFT_GREEN, TFT_BLACK);
+  tft.setTextColor(TFT_GREEN);
   floatToString(i, f_to_s_buffer);
   tft.setCursor(LETTER_X, LETTER_Y + 2*LETTER_HEIGHT);
   tft.print("I: ");
@@ -103,13 +110,24 @@ void printCurrent(float i) {
 
 void printPower(float p) {
   if (p < 0) p = 0.0;
-  Power.setTextColor(TFT_GREEN, TFT_BLACK);
-  tft.setTextColor(TFT_GREEN);
+  Power.setTextColor(TFT_BLUE, TFT_BLACK);
+  tft.setTextColor(TFT_BLUE);
   floatToString(p, f_to_s_buffer);
   tft.setCursor(LETTER_X, LETTER_Y + 3*LETTER_HEIGHT);
   tft.print("P: ");
   Power.print(f_to_s_buffer);
   tft.print("W");
+}
+
+void printMAH(float m) {
+  tft.drawXBitmap(LETTER_X+225, LETTER_Y + 3*LETTER_HEIGHT-30, mah, mahWidth, mahHeight, TFT_BLUE);
+  if (m < 0) m = 0.0;
+  Power.setTextColor(TFT_BLUE, TFT_BLACK);
+  tft.setTextColor(TFT_BLUE);
+  floatToString(m, f_to_s_buffer);
+  tft.setCursor(LETTER_X, LETTER_Y + 3*LETTER_HEIGHT);
+  tft.print("C: ");
+  Power.print(f_to_s_buffer);
 }
 
 void drawWifi() {
@@ -144,12 +162,28 @@ void drawOutputState() {
   
 }
 
+void clearPower() {
+  blank_sprite.setColorDepth(16);
+  blank_sprite.createSprite(280, LETTER_HEIGHT);
+  blank_sprite.fillSprite(TFT_BLACK);
+  blank_sprite.pushSprite(30, 160);
+  blank_sprite.deleteSprite();
+}
+
 void drawAll() {
   if (millis() - lastRefresh < SCREEN_REFRESH) return;
   drawOutputState();
   printSetpoint(SYSTEM_SETPOINT, digit);
   printVoltage(filtered_voltage);
   printCurrent(filtered_current);
-  printPower(V_READING*I_READING);
+  if (SYSTEM_MODE == BAT) {
+    if (displayingPower) clearPower();
+    displayingPower = false;
+    printMAH(0.0);
+  } else {
+    if (!displayingPower) clearPower();
+    displayingPower = true;
+    printPower(V_READING*I_READING);
+  }
   lastRefresh = millis();
 }

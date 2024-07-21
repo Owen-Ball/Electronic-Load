@@ -2,7 +2,7 @@
 #define _CONSTANTS_
 
 enum OUT_STATE {OUT_ON, OUT_OFF};
-enum MODE {CC, CV, CP, CR, None};
+enum MODE {CC, CV, CP, CR, BAT};
 enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
 //Setpoint Bounds

@@ -42,30 +42,27 @@ void updateSystem() {
 
 void updateMode() {
   bool update_mode = mode_button.pressed();
+  if (!update_mode) return;
   switch (SYSTEM_MODE) {
     case CC:
-      if (update_mode) {
-        SYSTEM_OUTPUT = OUT_OFF;
-        SYSTEM_MODE = CP;
-      }
+      SYSTEM_OUTPUT = OUT_OFF;
+      SYSTEM_MODE = CP;
       break;
     case CP:
-      if (update_mode) {
-        SYSTEM_OUTPUT = OUT_OFF;
-        SYSTEM_MODE = CR;
-      }
+      SYSTEM_OUTPUT = OUT_OFF;
+      SYSTEM_MODE = CR;
       break;
     case CR:
-      if (update_mode) {
-        SYSTEM_OUTPUT = OUT_OFF;
-        SYSTEM_MODE = CV;
-      }
+      SYSTEM_OUTPUT = OUT_OFF;
+      SYSTEM_MODE = CV;
       break;
     case CV:
-      if (update_mode) {
-        SYSTEM_OUTPUT = OUT_OFF;
-        SYSTEM_MODE = CC;
-      }
+      SYSTEM_OUTPUT = OUT_OFF;
+      SYSTEM_MODE = BAT;
+      break;
+    case BAT:
+      SYSTEM_OUTPUT = OUT_OFF;
+      SYSTEM_MODE = CC;
       break;
     default:
       SYSTEM_OUTPUT = OUT_OFF;
