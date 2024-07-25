@@ -19,6 +19,7 @@ extern FlickerFreePrint<TFT_eSPI> Current;
 extern FlickerFreePrint<TFT_eSPI> Setpoint;
 extern FlickerFreePrint<TFT_eSPI> Power;
 extern FlickerFreePrint<TFT_eSPI> Cursor;
+extern FlickerFreePrint<TFT_eSPI> DebugLine;
 extern char f_to_s_buffer[20];
 
 //Draw the wifi symbol at provided coordinates
@@ -41,6 +42,8 @@ void printCurrent(float i);
 
 //Print the measured power
 void printPower(float i);
+
+void printDebug(String s);
 
 //Draws an indicator of if the system output is on or off
 void drawOutputState();

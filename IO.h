@@ -31,11 +31,12 @@ extern bool useLargeVoltage;
 //same as above
 extern bool useLargeCurrent;
 
-
+//Keeps track of the current digit the cursor is on and will update the setpoint provided according to the encoder
 float updateEncoder(float setpoint);
 //reads the current state of the encoder to the nearest full step
 int readEncoder();
 
+//Roughly sets the DAC to the required value. Feedback loop handles precise setting
 void setDAC(float current, CURRENT_LIMIT SYSTEM_CURRENT);
 //sets the fan to the provided duty cycle. 0-100 but will properly handle <0 and >100
 void setFan(float dutyCycle);

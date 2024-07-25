@@ -83,6 +83,7 @@ float updateEncoder(float setpoint) {
 
 void setDAC(float current, CURRENT_LIMIT SYSTEM_CURRENT) {
   if (SYSTEM_CURRENT == CURR_HIGH){
+    //Roughly estimate DAC setpoint from desired current, feedback loop handles exact value
     int val = current*3.8543E02;
     if (val < 0) {
       val = 0;
@@ -119,6 +120,7 @@ void runFan() {
 }
 
 float readVoltage() {
+  
   float v;
   if (useLargeVoltage) {
     v = readVoltageLarge();

@@ -228,7 +228,6 @@ void readVandI() {
 void setCurrent() {
   limitFloat(CURRENT_SET, 0.0, 1.5*(SYSTEM_CURRENT == CURR_HIGH)?CURRENT_HIGH_LIMIT:CURRENT_LOW_LIMIT);
   setDAC(CURRENT_SET, SYSTEM_CURRENT);
-  
 }
 
 void filterMeasurements(float v, float i) {

@@ -15,6 +15,7 @@ FlickerFreePrint<TFT_eSPI> Current(&tft, TFT_WHITE, TFT_BLACK);
 FlickerFreePrint<TFT_eSPI> Setpoint(&tft, TFT_WHITE, TFT_BLACK);
 FlickerFreePrint<TFT_eSPI> Power(&tft, TFT_WHITE, TFT_BLACK);
 FlickerFreePrint<TFT_eSPI> Cursor(&tft, TFT_WHITE, TFT_BLACK);
+FlickerFreePrint<TFT_eSPI> DebugLine(&tft, TFT_WHITE, TFT_BLACK);
 
 bool isdef_wifi_sprite = false;
 bool omega_drawn = false;
@@ -128,6 +129,15 @@ void printMAH(float m) {
   tft.setCursor(LETTER_X, LETTER_Y + 3*LETTER_HEIGHT);
   tft.print("C: ");
   Power.print(f_to_s_buffer);
+}
+
+void printDebug(String s) {
+  char text[21];
+  tft.setFreeFont(&FreeMonoBold12pt7b);
+  s.toCharArray(text, 20);
+  tft.setCursor(20, 220);
+  DebugLine.print(text);
+  tft.setFreeFont(&FreeMonoBold24pt7b);
 }
 
 void drawWifi() {
