@@ -179,7 +179,7 @@ void drawAll() {
   if (SYSTEM_MODE == BAT) {
     if (displayingPower) clearPower();
     displayingPower = false;
-    printMAH(0.0);
+    printMAH(TOTAL_MAH);
   } else {
     if (!displayingPower) clearPower();
     displayingPower = true;

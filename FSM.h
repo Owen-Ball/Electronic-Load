@@ -13,6 +13,8 @@ extern float CURRENT_SET;
 extern float V_READING;
 extern float I_READING;
 
+extern float TOTAL_MAH;
+
 extern float filtered_voltage;
 extern float filtered_current;
 
@@ -30,6 +32,7 @@ void runCC();
 void runCP();
 void runCR();
 void runCV();
+void runBAT();
 
 void readVandI();
 void setCurrent();

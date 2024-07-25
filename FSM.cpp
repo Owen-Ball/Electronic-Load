@@ -15,6 +15,12 @@ float V_READING;
 float I_READING;
 long OUT_KILL_TIMER;
 
+//Records when the current for BAT mode was last dropped
+long current_last_updated = 0;
+
+long prev_time = 0;
+float TOTAL_MAH = 0;
+
 float filtered_voltage = 0;
 float filtered_current = 0;
 
@@ -58,6 +64,8 @@ void updateMode() {
       break;
     case CV:
       SYSTEM_OUTPUT = OUT_OFF;
+      TOTAL_MAH = 0;
+      prev_time = millis();
       SYSTEM_MODE = BAT;
       break;
     case BAT:
@@ -114,6 +122,9 @@ void updateSetpoint() {
     case CV:
       SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_VOLTAGE_SET);
       break; 
+    case BAT:
+      SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_VOLTAGE_SET);
+      break;
   }
 }
 
@@ -131,6 +142,9 @@ void runMode() {
       case CV:
         runCV();
         break; 
+      case BAT:
+        runBAT();
+        break;
     }
 }
 
@@ -146,8 +160,8 @@ void runCP() {
     SYSTEM_OUTPUT = OUT_OFF;
   } else {
     SYSTEM_CURRENT_SETPOINT = CURRENT_SET_FILTER*SYSTEM_CURRENT_SETPOINT + (1-CURRENT_SET_FILTER)*SYSTEM_SETPOINT / V_READING;
-    updateCurrent();
   }  
+  updateCurrent();
 }
 
 void runCR() {
@@ -156,12 +170,29 @@ void runCR() {
     SYSTEM_OUTPUT = OUT_OFF;
   } else {
     SYSTEM_CURRENT_SETPOINT = CURRENT_SET_FILTER*SYSTEM_CURRENT_SETPOINT + (1-CURRENT_SET_FILTER)*V_READING / SYSTEM_SETPOINT;
-    updateCurrent();  
   }
+  updateCurrent();  
 }
 
 void runCV() {
   SYSTEM_OUTPUT = OUT_OFF;
+  updateCurrent();
+}
+
+void runBAT() {
+  if (SYSTEM_OUTPUT == OUT_OFF) {
+    SYSTEM_CURRENT_SETPOINT = 5.00;
+    current_last_updated = millis();
+  } else {
+    if (V_READING < SYSTEM_SETPOINT - I_READING * BAT_RESISTANCE && millis() - current_last_updated > BAT_UPDATE_TIME) {
+      SYSTEM_CURRENT_SETPOINT -= BAT_CURRENT_STEP;
+      if (SYSTEM_CURRENT_SETPOINT <= BAT_END_CURRENT) SYSTEM_OUTPUT = OUT_OFF;
+    }
+  }
+  long curr_time = millis();
+  float loop_time = float(curr_time - prev_time); 
+  TOTAL_MAH += loop_time / 3600.0 * I_READING;
+  prev_time = curr_time;
   updateCurrent();  
 }
 

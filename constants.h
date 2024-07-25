@@ -5,6 +5,8 @@ enum OUT_STATE {OUT_ON, OUT_OFF};
 enum MODE {CC, CV, CP, CR, BAT};
 enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
+
+
 //Setpoint Bounds
 #define MAX_CURRENT_LOW_SET   1.50
 #define MAX_CURRENT_HIGH_SET  7.50
@@ -13,11 +15,15 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define MAX_RESISTANCE_SET    500.00
 #define MAX_POWER_SET         100.00
 
+
+
 //System Limits
 #define CURRENT_LOW_LIMIT     2.00
 #define CURRENT_HIGH_LIMIT    8.00
 #define VOLTAGE_LIMIT         35.00
 #define POWER_LIMIT           120.0
+
+
 
 //Pins
 #define FAN_PIN               11
@@ -48,6 +54,9 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //digitalRead of the button returning the wrong value
 #define BUTTON_AVG_COUNT      10
 
+
+
+
 //Below this voltage the low voltage sensor will be used
 #define V_THRESH_LOW          11.0
 //Above this voltage the high voltage sensor will be used
@@ -59,9 +68,11 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //On the high current setting, above this current, the high current sensor is used
 #define C_THRESH_HIGH         0.8
 
-
 //defines how long the current can be outside of 25% of the setpoint before being cut (ms)
 #define OUT_KILL_TIME_LIMIT   500
+
+
+
 
 //Vertical spacing between lines
 #define LETTER_HEIGHT         50
@@ -69,6 +80,9 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define LETTER_X              45
 //defines the y coordiante of the top of the numbers
 #define LETTER_Y              50
+
+//time in ms between screen updates
+#define SCREEN_REFRESH        75
 
 //sets the IIR filter used on values before displaying them. 
 //Only impacts the displayed values, not the values used in control loops and such
@@ -78,6 +92,9 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //greater than the below value. Makes output responsive to large steps
 #define FILTER_THRESHOLD      .02
 
+
+
+
 //sets the gain of the integral controller for current setpoint
 //1 or above likely to cause oscillations
 #define CURRENT_SET_GAIN      .8
@@ -85,8 +102,17 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //Filters how fast the set current can change for CR, CP, CV
 #define CURRENT_SET_FILTER    .75
 
-//time in ms between screen updates
-#define SCREEN_REFRESH        75
 
+
+//time in ms between current decreases in battery discharge mode
+#define BAT_UPDATE_TIME       100
+//Value of current steps in battery discharge mode
+#define BAT_CURRENT_STEP      .05
+//Speeds up discharging process by allowing measured voltage to drop below desired end voltage when
+//at high currents, since resistive losses result in voltage drop
+//Must be below actual resistance to avoid over discharging
+#define BAT_RESISTANCE        0.02
+//Cut off current for battery discharging
+#define BAT_END_CURRENT       0.2
 
 #endif // _CONSTANTS_
