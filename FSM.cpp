@@ -6,6 +6,7 @@ MODE SYSTEM_MODE;
 CURRENT_LIMIT SYSTEM_CURRENT;
 OUT_STATE SYSTEM_OUTPUT;
 float SYSTEM_SETPOINT;
+float SETPOINTS[5];
 
 //What the DAC is actually set to. Updated via feedback
 float CURRENT_SET;
@@ -24,11 +25,21 @@ float TOTAL_MAH = 0;
 float filtered_voltage = 0;
 float filtered_current = 0;
 
+
+void initSetpoints() {
+  SETPOINTS[CC] = DEFAULT_CC;
+  SETPOINTS[CV] = DEFAULT_CV;
+  SETPOINTS[CP] = DEFAULT_CP;
+  SETPOINTS[CR] = DEFAULT_CR;
+  SETPOINTS[BAT] = DEFAULT_BAT;
+}
+
 void initSystem() {
+  initSetpoints();
   SYSTEM_MODE = CC;
   SYSTEM_CURRENT = CURR_HIGH;
   SYSTEM_OUTPUT = OUT_OFF;
-  SYSTEM_SETPOINT = 0.0;
+  SYSTEM_SETPOINT = SETPOINTS[SYSTEM_MODE];
   CURRENT_SET = 0.0;
   OUT_KILL_TIMER = millis();
 }
@@ -49,6 +60,7 @@ void updateSystem() {
 void updateMode() {
   bool update_mode = mode_button.pressed();
   if (!update_mode) return;
+  SETPOINTS[SYSTEM_MODE] = SYSTEM_SETPOINT;
   switch (SYSTEM_MODE) {
     case CC:
       SYSTEM_OUTPUT = OUT_OFF;
@@ -75,8 +87,8 @@ void updateMode() {
     default:
       SYSTEM_OUTPUT = OUT_OFF;
       SYSTEM_MODE = CC;
-      
   }
+  SYSTEM_SETPOINT = SETPOINTS[SYSTEM_MODE];
 }
 
 void updateOutput() {

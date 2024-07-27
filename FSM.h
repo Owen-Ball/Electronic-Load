@@ -20,6 +20,7 @@ extern float filtered_current;
 
 void initSystem();
 void updateSystem();
+void initSetpoints();
 
 void updateMode();
 void updateOutput();

@@ -21,8 +21,8 @@ void setup() {
   Wire.begin(DAC_SDA, DAC_SCL);
   dac_low.begin(0x60, &Wire);
   dac_high.begin(0x61, &Wire);
-  dac_low.setVoltage(0, true);
-  dac_high.setVoltage(0, true);
+  dac_low.setVoltage(0, false);
+  dac_high.setVoltage(0, false);
 
   Serial.begin(115200);
   
@@ -45,12 +45,14 @@ void setup() {
 }
 
 void loop() {
-  float f = analogReadAverage(CURRSENSE_SMALL, 1000);
-  printDebug(String(f, 2));
-  //drawAll();
-  //updateSystem();
-  dac_low.setVoltage(100, false);
-  dac_high.setVoltage(0, false);
+  //float small = analogReadAverage(CURRSENSE_SMALL, 1000);
+  //float large = analogReadAverage(CURRSENSE_LARGE, 1000);
+  //printDebug(String(i) + " " + String(small, 2) + " " + String(large, 2));
+  drawAll();
+  updateSystem();
+  //if (mode_button.pressed()) i+=100;
+  //dac_low.setVoltage(i, false);
+  //dac_high.setVoltage(0, false);
   DEBUG_PRINTLN(millis() - prevtime);
   prevtime = millis();
 }

@@ -5,8 +5,6 @@ enum OUT_STATE {OUT_ON, OUT_OFF};
 enum MODE {CC, CV, CP, CR, BAT};
 enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
-
-
 //Setpoint Bounds
 #define MAX_CURRENT_LOW_SET   1.50
 #define MAX_CURRENT_HIGH_SET  7.50
@@ -15,6 +13,12 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define MAX_RESISTANCE_SET    500.00
 #define MAX_POWER_SET         100.00
 
+//Configure default setpoint values
+#define DEFAULT_CC            1.00
+#define DEFAULT_CV            5.00
+#define DEFAULT_CP            10.00
+#define DEFAULT_CR            10.00
+#define DEFAULT_BAT           15.30
 
 
 //System Limits
