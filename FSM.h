@@ -27,6 +27,7 @@ void updateOutput();
 void updateCurrentLimit();
 void updateSetpoint();
 void updateCurrent();
+void checkLimits();
 
 void runMode();
 void runCC();

@@ -47,7 +47,8 @@ void initSystem() {
 
 void updateSystem() {
   readVandI();
-  runFan();
+  checkLimits();
+  runFan(I_READING);
   updateMode();
   updateOutput();
   updateCurrentLimit();
@@ -138,6 +139,12 @@ void updateSetpoint() {
       SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_VOLTAGE_SET);
       break;
   }
+}
+
+void checkLimits() {
+  if (I_READING > CURRENT_HIGH_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
+  if (V_READING > VOLTAGE_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
+  if (V_READING*I_READING > POWER_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
 }
 
 void runMode() {

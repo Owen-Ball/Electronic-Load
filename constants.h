@@ -25,7 +25,7 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define CURRENT_LOW_LIMIT     2.00
 #define CURRENT_HIGH_LIMIT    8.00
 #define VOLTAGE_LIMIT         35.00
-#define POWER_LIMIT           120.0
+#define POWER_LIMIT           135.0
 
 
 
@@ -35,9 +35,9 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define PWM_FREQ              20000
 #define PWM_CHANNEL           0
 
-#define ENABLE_BUTTON_PIN     15
+#define ENABLE_BUTTON_PIN     38
 #define CURRENT_BUTTON_PIN    14
-#define MODE_BUTTON_PIN       38
+#define MODE_BUTTON_PIN       39
 #define ENCODER_BUTTON_PIN    16
 #define ENCODER_A             3
 #define ENCODER_B             4

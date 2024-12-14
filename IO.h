@@ -41,7 +41,7 @@ void setDAC(float current, CURRENT_LIMIT SYSTEM_CURRENT);
 //sets the fan to the provided duty cycle. 0-100 but will properly handle <0 and >100
 void setFan(float dutyCycle);
 //runs a fan curve that sets the fan speed based on MOSFET temperature
-void runFan();
+void runFan(float current);
 
 float readVoltage();
 float readVoltageLarge();

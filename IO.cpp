@@ -107,16 +107,22 @@ void setFan(float dutyCycle) {
   coolingFan->setPWM(FAN_PIN, PWM_FREQ, dutyCycle);
 }
 
-void runFan() {
-  float dutyCycle = 0;
+void runFan(float current) {
   float temp = readThermistor();
+  DEBUG_PRINTLN(temp);
 
   //25C = 0% fan, 40C = 100% fan
-  dutyCycle = (temp - 25.0) * 100.0/15.0;
-  dutyCycle = limitFloat(dutyCycle, 0.0, 100.0);
+  float dutyCycle1 = (temp - 25.0) * 100.0/15.0;
+  dutyCycle1 = limitFloat(dutyCycle1, 0.0, 100.0);
 
-  setFan(dutyCycle);
+
+  //3.0A = 0% fan, 7.0A = 100% fan
+  float dutyCycle2 = (current - 3.0) * 100.0 / (7.0 - 3.0);
+  dutyCycle2 = limitFloat(dutyCycle2, 0.0, 100.0);
   
+  float dutyCycle = max(dutyCycle1, dutyCycle2);
+  
+  setFan(dutyCycle);
 }
 
 float readVoltage() {

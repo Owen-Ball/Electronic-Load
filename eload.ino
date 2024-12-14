@@ -45,14 +45,14 @@ void setup() {
 }
 
 void loop() {
-  //float small = analogReadAverage(CURRSENSE_SMALL, 1000);
-  //float large = analogReadAverage(CURRSENSE_LARGE, 1000);
-  //printDebug(String(i) + " " + String(small, 2) + " " + String(large, 2));
+  //float small = analogReadAverage(VSENSE_SMALL, 1000);
+  //float large = analogReadAverage(VSENSE_LARGE, 1000);
+  //DEBUG_PRINTLN(String(small, 2) + " " + String(large, 2));
   drawAll();
   updateSystem();
   //if (mode_button.pressed()) i+=100;
   //dac_low.setVoltage(i, false);
   //dac_high.setVoltage(0, false);
-  DEBUG_PRINTLN(millis() - prevtime);
+  //DEBUG_PRINTLN(millis() - prevtime);
   prevtime = millis();
 }
