@@ -11,7 +11,7 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 #define MAX_VOLTAGE_SET       30.00
 #define MIN_RESISTANCE_SET    0.50
 #define MAX_RESISTANCE_SET    500.00
-#define MAX_POWER_SET         100.00
+#define MAX_POWER_SET         120.00
 
 //Configure default setpoint values
 #define DEFAULT_CC            1.00
@@ -23,9 +23,9 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
 //System Limits
 #define CURRENT_LOW_LIMIT     2.00
-#define CURRENT_HIGH_LIMIT    8.00
+#define CURRENT_HIGH_LIMIT    7.50
 #define VOLTAGE_LIMIT         35.00
-#define POWER_LIMIT           135.0
+#define POWER_LIMIT           120.0
 
 
 
