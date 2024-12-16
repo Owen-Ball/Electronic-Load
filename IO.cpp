@@ -180,17 +180,22 @@ float readVoltageSmall() {
 
 float readCurrent(CURRENT_LIMIT SYSTEM_CURRENT) {
   float c;
+  float safety_check;
   if (useLargeCurrent) {
-    c = readCurrentLarge(SYSTEM_CURRENT);
+    c = readCurrentLarge(SYSTEM_CURRENT, SAMPLE_COUNT);
     if (c < C_THRESH_LOW) {
       useLargeCurrent = false;
-      c = readCurrentSmall(SYSTEM_CURRENT);
+      c = readCurrentSmall(SYSTEM_CURRENT, SAMPLE_COUNT);
     }
   } else {
-    c = readCurrentSmall(SYSTEM_CURRENT);
+    c = readCurrentSmall(SYSTEM_CURRENT, SAMPLE_COUNT);
+    safety_check = readCurrentLarge(SYSTEM_CURRENT, 20);
+    if (safety_check > c + SAFETY_OFFSET) {
+      return -1;
+    }
     if (c > C_THRESH_HIGH) {
       useLargeCurrent = true;
-      c = readCurrentLarge(SYSTEM_CURRENT);
+      c = readCurrentLarge(SYSTEM_CURRENT, SAMPLE_COUNT);
     }
   }
   
@@ -199,8 +204,8 @@ float readCurrent(CURRENT_LIMIT SYSTEM_CURRENT) {
 }
 
 
-float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT) {
-  float raw = analogReadAverage(CURRSENSE_LARGE, 200);
+float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT, int samples) {
+  float raw = analogReadAverage(CURRSENSE_LARGE, samples);
   if (SYSTEM_CURRENT == CURR_HIGH) {
     float val =  pow(raw, 10)*-2.497340E-32 + \
     pow(raw, 9) * 3.86037E-28 + \
@@ -224,8 +229,8 @@ float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT) {
 
 
 
-float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT) {
-  float raw = analogReadAverage(CURRSENSE_SMALL, 200);
+float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT, int samples) {
+  float raw = analogReadAverage(CURRSENSE_SMALL, samples);
   if (SYSTEM_CURRENT == CURR_HIGH) {
     float val =  pow(raw, 10)*-3.81452E-34 + \
     pow(raw, 9) * 7.39220E-30 + \

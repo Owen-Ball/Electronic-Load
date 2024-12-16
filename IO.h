@@ -48,8 +48,8 @@ float readVoltageLarge();
 float readVoltageSmall();
 
 float readCurrent(CURRENT_LIMIT SYSTEM_CURRENT);
-float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT);
-float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT);
+float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT, int samples);
+float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT, int samples);
 
 //Measure the temperature of the MOSFET heatsink
 float readThermistor();

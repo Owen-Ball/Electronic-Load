@@ -7,6 +7,7 @@ CURRENT_LIMIT SYSTEM_CURRENT;
 OUT_STATE SYSTEM_OUTPUT;
 float SYSTEM_SETPOINT;
 float SETPOINTS[5];
+ERROR_CODES ERRORS;
 
 //What the DAC is actually set to. Updated via feedback
 float CURRENT_SET;
@@ -35,6 +36,7 @@ void initSetpoints() {
 }
 
 void initSystem() {
+  ERRORS = NO_ERROR;
   initSetpoints();
   SYSTEM_MODE = CC;
   SYSTEM_CURRENT = CURR_HIGH;
@@ -97,13 +99,17 @@ void updateOutput() {
     if (SYSTEM_OUTPUT == OUT_ON) {
       SYSTEM_OUTPUT = OUT_OFF;
     } else {
+      if (ERRORS == C_SENSE_ERROR) return;
       SYSTEM_OUTPUT = OUT_ON;
       OUT_KILL_TIMER = millis();
+      ERRORS = NO_ERROR;
     }
   }
 }
 
 void updateCurrentLimit() {
+  //DISABLED. LOW CURRENT MODE NOT ENABLED
+  return;
   if (current_button.pressed()) {
     DEBUG_PRINTLN("CURRENT LIMIT CHANGED");
     if (SYSTEM_CURRENT == CURR_LOW) {
@@ -142,9 +148,18 @@ void updateSetpoint() {
 }
 
 void checkLimits() {
-  if (I_READING > CURRENT_HIGH_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
-  if (V_READING > VOLTAGE_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
-  if (V_READING*I_READING > POWER_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
+  if (I_READING > CURRENT_HIGH_LIMIT) {
+    SYSTEM_OUTPUT = OUT_OFF;
+    ERRORS = OVER_C_ERROR;
+  }
+  if (V_READING > VOLTAGE_LIMIT) {
+    SYSTEM_OUTPUT = OUT_OFF;
+    ERRORS = OVER_V_ERROR;
+  }
+  if (V_READING*I_READING > POWER_LIMIT) {
+    SYSTEM_OUTPUT = OUT_OFF;
+    ERRORS = OVER_P_ERROR;
+  }
 }
 
 void runMode() {
@@ -218,7 +233,10 @@ void runBAT() {
 void updateCurrent() {;
   long timer = millis() - OUT_KILL_TIMER;
   if (SYSTEM_CURRENT_SETPOINT < .75*I_READING || SYSTEM_CURRENT_SETPOINT > 1.25*I_READING) {
-    if (timer > OUT_KILL_TIME_LIMIT) SYSTEM_OUTPUT = OUT_OFF;
+    if (timer > OUT_KILL_TIME_LIMIT) {
+      SYSTEM_OUTPUT = OUT_OFF;
+      ERRORS = MISMATCH_ERROR;
+    }
   } else {
     OUT_KILL_TIMER = millis();
   }
@@ -235,6 +253,10 @@ void updateCurrent() {;
 
 void readVandI() {
   I_READING = readCurrent(SYSTEM_CURRENT);
+  if (I_READING < 0) {
+    SYSTEM_OUTPUT = OUT_OFF;
+    ERRORS = C_SENSE_ERROR;
+  }
   V_READING = readVoltage();
 
   //There is around 8-12mA of leakage current even when the output is off

@@ -5,6 +5,15 @@ enum OUT_STATE {OUT_ON, OUT_OFF};
 enum MODE {CC, CV, CP, CR, BAT};
 enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
+//NO_ERROR: No error present. Set to this value when output enabled
+//C_SENSE_ERROR: Discrepancy between low and high current sensors
+//               Disables device, cannot be overwritten
+//OVER_C_ERROR: Current went over system limit
+//OVER_V_ERROR: Voltage went over system limit
+//OVER_P_ERROR: Power went over system limit
+//MISMATCH_ERROR: Set current is not being achieved within required margin of error
+enum ERROR_CODES {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERROR, MISMATCH_ERROR};
+
 //Setpoint Bounds
 #define MAX_CURRENT_LOW_SET   1.50
 #define MAX_CURRENT_HIGH_SET  7.50
@@ -88,6 +97,12 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //time in ms between screen updates
 #define SCREEN_REFRESH        75
 
+
+
+//Defines the number of samples taken for analog input readings
+#define SAMPLE_COUNT          200
+//If the large current reads this much above the small current sensor, turn off the device
+#define SAFETY_OFFSET         0.2
 //sets the IIR filter used on values before displaying them. 
 //Only impacts the displayed values, not the values used in control loops and such
 //0 = no filter, -> 1 = high filtering
