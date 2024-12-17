@@ -43,7 +43,13 @@ void printCurrent(float i);
 //Print the measured power
 void printPower(float i);
 
+//Used for printing debug values
+//OR for printing error messages
 void printDebug(String s);
+
+//When debug is disabled, use printDebug to display error message
+//If it is enabled, it gets printed via the serial monitor
+void printErrorMsg(ERROR_CODE ERRORS);
 
 //Draws an indicator of if the system output is on or off
 void drawOutputState();

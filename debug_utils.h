@@ -2,7 +2,7 @@
 https://forum.arduino.cc/t/serial-debug-macro/64259/3
 */
 
-#define DEBUG
+//#define DEBUG
 
 #ifndef DEBUGUTILS_H
 #define DEBUGUTILS_H

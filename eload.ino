@@ -45,14 +45,19 @@ void setup() {
 }
 
 void loop() {
+  
+  drawAll();
+  updateSystem();
+  
+  DEBUG_PRINTLN(millis() - prevtime);
+  DEBUG_PRINTLN("Error: " + String(ERRORS));
+  
+  prevtime = millis();
+
   //float small = analogReadAverage(VSENSE_SMALL, 1000);
   //float large = analogReadAverage(VSENSE_LARGE, 1000);
   //DEBUG_PRINTLN(String(small, 2) + " " + String(large, 2));
-  drawAll();
-  updateSystem();
   //if (mode_button.pressed()) i+=100;
   //dac_low.setVoltage(i, false);
   //dac_high.setVoltage(0, false);
-  //DEBUG_PRINTLN(millis() - prevtime);
-  prevtime = millis();
 }

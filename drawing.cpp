@@ -132,9 +132,13 @@ void printMAH(float m) {
 }
 
 void printDebug(String s) {
-  char text[21];
+  char text[DEBUG_LEN+1];
+  for (uint8_t i = 0; i<DEBUG_LEN; i++) {
+    text[i]=' ';
+  }
   tft.setFreeFont(&FreeMonoBold12pt7b);
-  s.toCharArray(text, 20);
+  s.toCharArray(text, DEBUG_LEN);
+  text[DEBUG_LEN] = '\0';
   tft.setCursor(20, 220);
   DebugLine.print(text);
   tft.setFreeFont(&FreeMonoBold24pt7b);
@@ -180,6 +184,26 @@ void clearPower() {
   blank_sprite.deleteSprite();
 }
 
+
+void printErrorMsg(ERROR_CODE ERRORS) {
+  String msg;
+  switch (ERRORS) {
+    case NO_ERROR:
+      msg = " ";
+    case C_SENSE_ERROR:
+      msg = "Current Sense Failure";
+    case OVER_C_ERROR:
+      msg = "Over Current";
+    case OVER_V_ERROR:
+      msg = "Over Voltage";
+    case OVER_P_ERROR:
+      msg = "Over Power";
+    case MISMATCH_ERROR:
+      msg = "Curr Set != Curr Meas";
+  }
+  printDebug(msg);
+}
+
 void drawAll() {
   if (millis() - lastRefresh < SCREEN_REFRESH) return;
   drawOutputState();
@@ -195,5 +219,8 @@ void drawAll() {
     displayingPower = true;
     printPower(V_READING*I_READING);
   }
+  #ifndef DEBUG
+    printErrorMsg(ERRORS);
+  #endif
   lastRefresh = millis();
 }

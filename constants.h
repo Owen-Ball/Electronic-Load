@@ -12,7 +12,7 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //OVER_V_ERROR: Voltage went over system limit
 //OVER_P_ERROR: Power went over system limit
 //MISMATCH_ERROR: Set current is not being achieved within required margin of error
-enum ERROR_CODES {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERROR, MISMATCH_ERROR};
+enum ERROR_CODE {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERROR, MISMATCH_ERROR};
 
 //Setpoint Bounds
 #define MAX_CURRENT_LOW_SET   1.50
@@ -96,6 +96,8 @@ enum ERROR_CODES {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ER
 
 //time in ms between screen updates
 #define SCREEN_REFRESH        75
+
+#define DEBUG_LEN             21
 
 
 

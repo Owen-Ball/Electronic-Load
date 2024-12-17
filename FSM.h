@@ -10,7 +10,7 @@ extern OUT_STATE SYSTEM_OUTPUT;
 extern float SYSTEM_SETPOINT;
 extern float CURRENT_SET;
 
-extern ERROR_CODES ERRORS;
+extern ERROR_CODE ERRORS;
 
 extern float V_READING;
 extern float I_READING;

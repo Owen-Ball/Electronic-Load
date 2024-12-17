@@ -3,7 +3,7 @@
 
 
 #include "Arduino.h"
-#include <Button.h>
+#include "Button.h"
 #include <Wire.h>
 #include <Adafruit_MCP4725.h>
 #include "constants.h"
@@ -43,12 +43,18 @@ void setFan(float dutyCycle);
 //runs a fan curve that sets the fan speed based on MOSFET temperature
 void runFan(float current);
 
+//Read the voltage from the correct sensor
 float readVoltage();
+//Reads the analog input and maps it to a voltage. High voltage sensor
 float readVoltageLarge();
+//Reads the analog input and maps it to a voltage. Low voltage sensor
 float readVoltageSmall();
 
+//Read the current from the correct sensor
 float readCurrent(CURRENT_LIMIT SYSTEM_CURRENT);
+//Reads the analog input and maps it to a current. High current sensor
 float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT, int samples);
+//Reads the analog input and maps it to a current. Low current sensor
 float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT, int samples);
 
 //Measure the temperature of the MOSFET heatsink
