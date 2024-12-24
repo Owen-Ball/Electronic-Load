@@ -26,6 +26,7 @@ float TOTAL_MAH = 0;
 float filtered_voltage = 0;
 float filtered_current = 0;
 
+float TEMPERATURE = 0.0;
 
 void initSetpoints() {
   SETPOINTS[CC] = DEFAULT_CC;
@@ -50,7 +51,8 @@ void initSystem() {
 void updateSystem() {
   readVandI();
   checkLimits();
-  runFan(I_READING);
+  TEMPERATURE = readThermistor();
+  runFan(I_READING, TEMPERATURE);
   updateMode();
   updateOutput();
   updateCurrentLimit();
@@ -64,6 +66,7 @@ void updateMode() {
   bool update_mode = mode_button.pressed();
   if (!update_mode) return;
   SETPOINTS[SYSTEM_MODE] = SYSTEM_SETPOINT;
+  prev_time = millis();
   switch (SYSTEM_MODE) {
     case CC:
       SYSTEM_OUTPUT = OUT_OFF;
@@ -75,12 +78,12 @@ void updateMode() {
       break;
     case CR:
       SYSTEM_OUTPUT = OUT_OFF;
-      SYSTEM_MODE = CV;
+      //bypass CV mode
+      SYSTEM_MODE = BAT;
       break;
     case CV:
       SYSTEM_OUTPUT = OUT_OFF;
       TOTAL_MAH = 0;
-      prev_time = millis();
       SYSTEM_MODE = BAT;
       break;
     case BAT:
@@ -160,6 +163,10 @@ void checkLimits() {
     SYSTEM_OUTPUT = OUT_OFF;
     ERRORS = OVER_P_ERROR;
   }
+  if (TEMPERATURE > TEMP_LIMIT) {
+    SYSTEM_OUTPUT = OUT_OFF;
+    ERRORS = OVER_T_ERROR;
+  }
 }
 
 void runMode() {
@@ -234,8 +241,8 @@ void updateCurrent() {;
   long timer = millis() - OUT_KILL_TIMER;
   if (SYSTEM_CURRENT_SETPOINT < .75*I_READING || SYSTEM_CURRENT_SETPOINT > 1.25*I_READING) {
     if (timer > OUT_KILL_TIME_LIMIT) {
+      if (SYSTEM_OUTPUT == OUT_ON) ERRORS = MISMATCH_ERROR;
       SYSTEM_OUTPUT = OUT_OFF;
-      ERRORS = MISMATCH_ERROR;
     }
   } else {
     OUT_KILL_TIMER = millis();

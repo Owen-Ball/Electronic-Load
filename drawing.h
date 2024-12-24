@@ -43,6 +43,12 @@ void printCurrent(float i);
 //Print the measured power
 void printPower(float i);
 
+//Print the heatsink temperature
+void printTemp(float t);
+
+//Display a degree symbol for the temperature readout
+void drawDegreeSymbol(int x, int y);
+
 //Used for printing debug values
 //OR for printing error messages
 void printDebug(String s);

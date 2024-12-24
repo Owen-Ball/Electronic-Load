@@ -17,6 +17,8 @@ extern float I_READING;
 
 extern float TOTAL_MAH;
 
+extern float TEMPERATURE;
+
 extern float filtered_voltage;
 extern float filtered_current;
 

@@ -7,6 +7,7 @@
 TFT_eSPI tft = TFT_eSPI();
 TFT_eSprite wifi_sprite = TFT_eSprite(&tft);
 TFT_eSprite output_sprite = TFT_eSprite(&tft);
+TFT_eSprite degree_sprite = TFT_eSprite(&tft);
 TFT_eSprite blank_sprite = TFT_eSprite(&tft);
 
 char f_to_s_buffer[20];
@@ -16,10 +17,12 @@ FlickerFreePrint<TFT_eSPI> Setpoint(&tft, TFT_WHITE, TFT_BLACK);
 FlickerFreePrint<TFT_eSPI> Power(&tft, TFT_WHITE, TFT_BLACK);
 FlickerFreePrint<TFT_eSPI> Cursor(&tft, TFT_WHITE, TFT_BLACK);
 FlickerFreePrint<TFT_eSPI> DebugLine(&tft, TFT_WHITE, TFT_BLACK);
+FlickerFreePrint<TFT_eSPI> Temp(&tft, TFT_WHITE, TFT_BLACK);
 
 bool isdef_wifi_sprite = false;
 bool omega_drawn = false;
 bool displayingPower = false;
+bool isdef_degree_sprite = false;
 long lastRefresh = 0;
 
 void floatToString(float f, char* s) {  
@@ -139,9 +142,33 @@ void printDebug(String s) {
   tft.setFreeFont(&FreeMonoBold12pt7b);
   s.toCharArray(text, DEBUG_LEN);
   text[DEBUG_LEN] = '\0';
-  tft.setCursor(20, 220);
+  tft.setCursor(15, 230);
   DebugLine.print(text);
   tft.setFreeFont(&FreeMonoBold24pt7b);
+}
+
+void printTemp(float t) {
+  tft.setFreeFont(&FreeMonoBold12pt7b);
+  Temp.setTextColor(TFT_WHITE, TFT_BLACK);
+  tft.setTextColor(TFT_WHITE);
+  sprintf(f_to_s_buffer, "%02d C", int(t));
+  f_to_s_buffer[4] = '\0';
+  drawDegreeSymbol(255, 212);
+  tft.setCursor(225, 226);
+  Temp.print(f_to_s_buffer);
+  tft.setFreeFont(&FreeMonoBold24pt7b);
+}
+
+void drawDegreeSymbol(int x, int y) {
+  if (!isdef_degree_sprite) {
+    isdef_degree_sprite = true;
+    degree_sprite.setColorDepth(16);
+    degree_sprite.createSprite(10, 10);
+    degree_sprite.fillSprite(TFT_TRANSPARENT);
+    degree_sprite.fillCircle(5, 5, 4, TFT_WHITE);
+    degree_sprite.fillCircle(5, 5, 2, TFT_BLACK);
+  }
+  degree_sprite.pushSprite(x, y, TFT_TRANSPARENT);
 }
 
 void drawWifi() {
@@ -190,16 +217,25 @@ void printErrorMsg(ERROR_CODE ERRORS) {
   switch (ERRORS) {
     case NO_ERROR:
       msg = " ";
+      break;
     case C_SENSE_ERROR:
-      msg = "Current Sense Failure";
+      msg = "I Sense Fail";
+      break;
     case OVER_C_ERROR:
       msg = "Over Current";
+      break;
     case OVER_V_ERROR:
       msg = "Over Voltage";
+      break;
     case OVER_P_ERROR:
       msg = "Over Power";
+      break;
+    case OVER_T_ERROR:
+      msg = "Over Temp";
+      break;
     case MISMATCH_ERROR:
-      msg = "Curr Set != Curr Meas";
+      msg = "I_Set!=I_Meas";
+      break;
   }
   printDebug(msg);
 }
@@ -210,6 +246,7 @@ void drawAll() {
   printSetpoint(SYSTEM_SETPOINT, digit);
   printVoltage(filtered_voltage);
   printCurrent(filtered_current);
+  printTemp(TEMPERATURE);
   if (SYSTEM_MODE == BAT) {
     if (displayingPower) clearPower();
     displayingPower = false;

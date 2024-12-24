@@ -54,8 +54,8 @@ void loop() {
   
   prevtime = millis();
 
-  //float small = analogReadAverage(VSENSE_SMALL, 1000);
-  //float large = analogReadAverage(VSENSE_LARGE, 1000);
+  //float small = analogReadAverage(CURRSENSE_SMALL, 1000);
+  //float large = analogReadAverage(CURRSENSE_LARGE, 1000);
   //DEBUG_PRINTLN(String(small, 2) + " " + String(large, 2));
   //if (mode_button.pressed()) i+=100;
   //dac_low.setVoltage(i, false);

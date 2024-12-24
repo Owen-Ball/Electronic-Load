@@ -11,8 +11,9 @@ enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 //OVER_C_ERROR: Current went over system limit
 //OVER_V_ERROR: Voltage went over system limit
 //OVER_P_ERROR: Power went over system limit
+//OVER_T_ERROR: Heatsink temp went over system limit
 //MISMATCH_ERROR: Set current is not being achieved within required margin of error
-enum ERROR_CODE {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERROR, MISMATCH_ERROR};
+enum ERROR_CODE {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERROR, OVER_T_ERROR, MISMATCH_ERROR};
 
 //Setpoint Bounds
 #define MAX_CURRENT_LOW_SET   1.50
@@ -32,9 +33,10 @@ enum ERROR_CODE {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERR
 
 //System Limits
 #define CURRENT_LOW_LIMIT     2.00
-#define CURRENT_HIGH_LIMIT    7.50
-#define VOLTAGE_LIMIT         35.00
-#define POWER_LIMIT           120.0
+#define CURRENT_HIGH_LIMIT    7.7
+#define VOLTAGE_LIMIT         33.00
+#define POWER_LIMIT           125.0
+#define TEMP_LIMIT            60.0
 
 
 
@@ -104,7 +106,9 @@ enum ERROR_CODE {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERR
 //Defines the number of samples taken for analog input readings
 #define SAMPLE_COUNT          200
 //If the large current reads this much above the small current sensor, turn off the device
-#define SAFETY_OFFSET         0.2
+#define SAFETY_OFFSET         0.25
+//Triggering of the safety shutoff requires this many invalid readings in a row
+#define SAFETY_COUNT          3
 //sets the IIR filter used on values before displaying them. 
 //Only impacts the displayed values, not the values used in control loops and such
 //0 = no filter, -> 1 = high filtering

@@ -26,6 +26,7 @@ bool useLargeCurrent = true;
 bool digit_updated = false;
 int prev_encoder = 0;
 
+int safety_count = 0;
 
 void writeEncoder(int val) {
   encoder.setCount(4*val);
@@ -107,12 +108,11 @@ void setFan(float dutyCycle) {
   coolingFan->setPWM(FAN_PIN, PWM_FREQ, dutyCycle);
 }
 
-void runFan(float current) {
-  float temp = readThermistor();
-  DEBUG_PRINTLN(temp);
+void runFan(float current, float temperature) {
+  DEBUG_PRINTLN(temperature);
 
   //25C = 0% fan, 40C = 100% fan
-  float dutyCycle1 = (temp - 25.0) * 100.0/15.0;
+  float dutyCycle1 = (temperature - 25.0) * 100.0/15.0;
   dutyCycle1 = limitFloat(dutyCycle1, 0.0, 100.0);
 
 
@@ -191,7 +191,10 @@ float readCurrent(CURRENT_LIMIT SYSTEM_CURRENT) {
     c = readCurrentSmall(SYSTEM_CURRENT, SAMPLE_COUNT);
     safety_check = readCurrentLarge(SYSTEM_CURRENT, 20);
     if (safety_check > c + SAFETY_OFFSET) {
-      return -1;
+      safety_count +=1;
+      if (safety_count == SAFETY_COUNT) return -1;
+    } else {
+      safety_count = 0;
     }
     if (c > C_THRESH_HIGH) {
       useLargeCurrent = true;
@@ -207,17 +210,17 @@ float readCurrent(CURRENT_LIMIT SYSTEM_CURRENT) {
 float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT, int samples) {
   float raw = analogReadAverage(CURRSENSE_LARGE, samples);
   if (SYSTEM_CURRENT == CURR_HIGH) {
-    float val =  pow(raw, 10)*-2.497340E-32 + \
-    pow(raw, 9) * 3.86037E-28 + \
-    pow(raw, 8) *-2.56619E-24 + \
-    pow(raw, 7) * 9.61260E-21 + \
-    pow(raw, 6) *-2.23411E-17 + \
-    pow(raw, 5) * 3.34129E-14 + \
-    pow(raw, 4) *-3.21826E-11 + \
-    pow(raw, 3) * 1.92808E-08 + \
-    pow(raw, 2) *-6.62332E-06  + \
-    raw         * 3.95693E-03  + \
-                  5.66650E-02;
+    float val =  pow(raw, 10)*-1.63034E-32 + \
+    pow(raw, 9) * 2.60202E-28 + \
+    pow(raw, 8) *-1.77464E-24 + \
+    pow(raw, 7) * 6.76420E-21 + \
+    pow(raw, 6) *-1.58241E-17 + \
+    pow(raw, 5) * 2.34779E-14 + \
+    pow(raw, 4) *-2.19820E-11 + \
+    pow(raw, 3) * 1.24020E-08 + \
+    pow(raw, 2) *-3.80117E-06  + \
+    raw         * 3.35855E-03  + \
+                  1.06078E-01;
   
     if (raw == 0) return 0.0;
     if (val <= 0) val = 0.0;
@@ -232,17 +235,17 @@ float readCurrentLarge(CURRENT_LIMIT SYSTEM_CURRENT, int samples) {
 float readCurrentSmall(CURRENT_LIMIT SYSTEM_CURRENT, int samples) {
   float raw = analogReadAverage(CURRSENSE_SMALL, samples);
   if (SYSTEM_CURRENT == CURR_HIGH) {
-    float val =  pow(raw, 10)*-3.81452E-34 + \
-    pow(raw, 9) * 7.39220E-30 + \
-    pow(raw, 8) *-6.04865E-26 + \
-    pow(raw, 7) * 2.72164E-22 + \
-    pow(raw, 6) *-7.35687E-19 + \
-    pow(raw, 5) * 1.22785E-15 + \
-    pow(raw, 4) *-1.25754E-12 + \
-    pow(raw, 3) * 7.63269E-10 + \
-    pow(raw, 2) *-2.48717E-07  + \
-    raw         * 2.91863E-04  + \
-                  9.48638E-03;
+    float val =  pow(raw, 10)*-1.57915E-34 + \
+    pow(raw, 9) * 2.72220E-30 + \
+    pow(raw, 8) *-2.03675E-26 + \
+    pow(raw, 7) * 8.82230E-23 + \
+    pow(raw, 6) *-2.49323E-19 + \
+    pow(raw, 5) * 4.84118E-16 + \
+    pow(raw, 4) *-6.39218E-13 + \
+    pow(raw, 3) * 5.30865E-10 + \
+    pow(raw, 2) *-2.39639E-07  + \
+    raw         * 3.04127E-04  + \
+                  9.63830E-03;
     if (val <= 0) val = 0.0;
     return val;
   } else {
