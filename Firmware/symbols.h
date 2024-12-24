@@ -5,6 +5,7 @@
 const uint16_t ohmWidth = 28;
 const uint16_t ohmHeight = 36;
 
+//mAh drawn out with individual pixels since there is not enough room to write out "mAh" normally
 const uint16_t mahWidth = 28;
 const uint16_t mahHeight = 36;
 
