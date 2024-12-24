@@ -1,17 +1,49 @@
 # Overview
  A DIY electronic load capable of 
-* CC, CR, CP, Battery Modes
+* CC, CR, CP, Battery (BT) Modes
 * 30V, 50mA-7.5A, 120W
 * 0-12V @ 3mV resolution, 0-40V @ 10mV resolution
 * 0-1A @ 300uA resolution, 0-10A @ 2.5mA resolution
 
 The design uses a custom PCB featuring an ESP32S3 Feather microcontroller. 4 power FETs dissipate the power via a CPU heatsink and current is measured using a bank of power resistors. With proper calibration, measurements/setpoints are within 1% across the entire operational range. 
 
+![Front View](./Media/front_view.png)
+![Back View](./Media/back_view.png)
+
 # To Do Feature List
 * Check that the FET that burned is properly secured to heatsink
-* Safety check the high sensitivity current reading with the low sensitivity one. Currently when using the high sensitivity sensor, the system will not detect a failure in 3/4 FETs due to a design oversight desribed below.
 * CV mode? Not really sure for what application though
 
+# Device Usage
+This section provides a brief overview of device operation, including
+* An overview of the UI elements
+* Using the UI to operate the device
+* Some potential pitfalls and things to look out for using the device
+* Proper power connections and USB-C connections
+## UI Overview
+There are 4 "screens" on the UI, corresponding to the 4 operating modes of the device. These are cycles through with the "mode" (M) button. The current mode is indicated in the top left. On each screen, the output can be enabled with the "enable" (E) button.
+
+On each screen, the top-most value is the setpoint for the mode. This value is changed via the encoder. The 3 values below this are the measured values, which consist of the voltage, current, and either the power or discharged mAh in the case of battery mode. The temperature is also displayed at the bottom, along with any error messages. The output state is indicated by a red (off) or green (on) circle in the bottom right.
+
+## Firmware Operation
+On each screen, the rotary encoder can be used to change the setpoint within the system bounds. The place value being edited can be changed by clicking the encoder to cycle through place values, or by pressing down the encoder and turning it.
+
+Once on the desired mode and with the correct setpoint, the enable button can be used to toggle the system output. The output indicator will turn green. If the output turns off unexpectedly, an error/warning message should be displayed indicating the reason, with most of these going away next time the enable button is pressed.
+
+All modes operate in general by very roughly setting a current, maybe with 10-25% accuracy. The actual current is monitored and used to adjust the setpoint. This is done with an integral controller, which requires some sanity checking to ensure system safety. If there is no source connected (or it is underpowered), the system will detect this and shut off the output. More specifically, if the set current and measured current are not within a certain tolerance of each other for a set amount of time, the output is disabled.
+
+Other reasons for system shutoff are voltage or temperature being exceeded. In CR or CP modes, since the current is automatically calculated the output will be shut off if the system tries to set the current or power above the system limit.
+
+In rare circumstances the system can oscillate. This will occur in the presence of a slow responding source in series (ie an incandescent bulb) or through interactions with the feedback system of a power supply. There is no protection against this, so turn the system off if observed.
+
+## Hardware Operation
+While the system technically has reverse polarity protection, it is highly recommended that this is not relied on. As such, make sure to connect the higher potential of the source to the +/red terminal and the lower to the -/black terminal. While the system should draw no current while powered off, I recommend having the system powered before connecting a load.
+
+When connecting to the Feather using a USB-C cable, a cable with the 5V line cut is recommended. The system has diodes on the 5V lines so there are no shorting risks, but for some reason the system measurements differ by around 1% depending on whether the system receives USB power or not. Thus for calibration using the serial monitor, a cable with no power is essential. 
+
+The system can be put into bootloader mode by pressing down the encoder while turning on the system (assuming you bridge the encoder pin and bootloader testpad on the feather together).
+
+Additionally, please use caution when operating the device, as mains 120V power is used. There are potential areas of risk, including power supply failure and improper crimping for the live wires.
 
 # Hardware
 
