@@ -212,7 +212,7 @@ void clearPower() {
 }
 
 
-void printErrorMsg(ERROR_CODE ERRORS) {
+void printErrorMsg() {
   String msg;
   switch (ERRORS) {
     case NO_ERROR:
@@ -257,7 +257,7 @@ void drawAll() {
     printPower(V_READING*I_READING);
   }
   #ifndef DEBUG
-    printErrorMsg(ERRORS);
+    printErrorMsg();
   #endif
   lastRefresh = millis();
 }

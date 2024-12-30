@@ -55,7 +55,7 @@ void printDebug(String s);
 
 //When debug is disabled, use printDebug to display error message
 //If it is enabled, it gets printed via the serial monitor
-void printErrorMsg(ERROR_CODE ERRORS);
+void printErrorMsg();
 
 //Draws an indicator of if the system output is on or off
 void drawOutputState();

@@ -21,7 +21,7 @@ This section provides a brief overview of device operation, including
 * Some potential pitfalls and things to look out for using the device
 * Proper power connections and USB-C connections
 ## UI Overview
-There are 4 "screens" on the UI, corresponding to the 4 operating modes of the device. These are cycles through with the "mode" (M) button. The current mode is indicated in the top left. On each screen, the output can be enabled with the "enable" (E) button.
+There are 4 "screens" on the UI, corresponding to the 4 operating modes of the device. These are cycled through with the "mode" (M) button. The current mode is indicated in the top left. On each screen, the output can be enabled with the "enable" (E) button.
 
 On each screen, the top-most value is the setpoint for the mode. This value is changed via the encoder. The 3 values below this are the measured values, which consist of the voltage, current, and either the power or discharged mAh in the case of battery mode. The temperature is also displayed at the bottom, along with any error messages. The output state is indicated by a red (off) or green (on) circle in the bottom right.
 
@@ -32,12 +32,12 @@ Once on the desired mode and with the correct setpoint, the enable button can be
 
 All modes operate in general by very roughly setting a current, maybe with 10-25% accuracy. The actual current is monitored and used to adjust the setpoint. This is done with an integral controller, which requires some sanity checking to ensure system safety. If there is no source connected (or it is underpowered), the system will detect this and shut off the output. More specifically, if the set current and measured current are not within a certain tolerance of each other for a set amount of time, the output is disabled.
 
-Other reasons for system shutoff are voltage or temperature being exceeded. In CR or CP modes, since the current is automatically calculated the output will be shut off if the system tries to set the current or power above the system limit.
+Other reasons for system shutoff are voltage or temperature limits being exceeded. In CR or CP modes, since the current is automatically calculated the output will be shut off if the system tries to set the current or power above the system limit.
 
 In rare circumstances the system can oscillate. This will occur in the presence of a slow responding source in series (ie an incandescent bulb) or through interactions with the feedback system of a power supply. There is no protection against this, so turn the system off if observed.
 
 ## Hardware Operation
-While the system technically has reverse polarity protection, it is highly recommended that this is not relied on. As such, make sure to connect the higher potential of the source to the +/red terminal and the lower to the -/black terminal. While the system should draw no current while powered off, I recommend having the system powered before connecting a load.
+While the system has some reverse polarity protection, it is highly recommended that this is not relied on. As such, make sure to connect the higher potential of the source to the +/red terminal and the lower to the -/black terminal. While the system should draw no current while powered off, I recommend having the system powered before connecting a source.
 
 When connecting to the Feather using a USB-C cable, a cable with the 5V line cut is recommended. The system has diodes on the 5V lines so there are no shorting risks, but for some reason the system measurements differ by around 1% depending on whether the system receives USB power or not. Thus for calibration using the serial monitor, a cable with no power is essential. 
 
@@ -68,3 +68,15 @@ The high sensitivity current sensor amplies the voltage across the power resisto
 The low sensitivity (higher range) current sensor uses resistors to average the voltages across the 4 shunts. This means it works properly in high current mode, but not in low, since this setup will not work when only the one FET is active. This mode peaks at around <span style="color:red"> 10A (need to check)</span>.
 
 As a summary of the design oversights, the only fully functioning current sensing modes would be high current mode + low sensitivity sensor and low current mode, high sensitivity sensor. After discovering this issue, I cut support for low current mode entirely since I currently do not have a use case for the latter mode (would be 0-250mA), although this may be added in the future. I did decide to use the high sensitivity current sensor is used in high current mode despite only directly measuring 1/4 of the current.
+
+
+# Firmware Details
+More details regarding the firmware implementation can be found in the firmware-specific readme
+[here](./Firmware/Firmware_ReadMe.md)
+
+This includes:
+* Error codes
+* Feedback loops
+* System FSM
+* Calibration
+* Setup 
