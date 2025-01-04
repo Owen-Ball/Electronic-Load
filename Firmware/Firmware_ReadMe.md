@@ -12,11 +12,18 @@ When triggered, a warning/error will turn off the output. Of these, all but C_SE
 C_SENSE_ERROR could indicate a failure of one of the power MOSFETs and can only be disabled via a power cycle. You should proceed with 
 caution by testing the device at ~1A using a current limited supply.
 
-# Library Version Info
-* Arduino ESP32: 2.0.18-arduino.5
-* ESP32_FastPWM: v1.1.0
+# Library & Board Version Info
+* Espressif Systems esp32: v2.0.14
+    * Board: Adafruit Feather ESP32-S3 2MB PSRAM
+    * Add https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json in _Additional Boards Manager_
+* Adafruit BusIO: v1.16.2
 * Adafruit_MCP4725: v2.0.2
+* ESP32_FastPWM: v1.1.0
 * ESP32Encoder: v0.11.6
+* [FlickerFreePrint](https://github.com/KrisKasprzak/FlickerFreePrint) 
+* TFT_eSPI: v2.5.43
+    * Need to overwrite _Arduino\libraries\TFT_eSPI\User_Setup.h_ with the following: [User_Setup.h](User_Setup.h)
+
 
 # Modes of Operation
 All modes operate around setting a current on the device. Depending on the mode, this may be a constant current or it can be a function of voltage.
@@ -56,3 +63,5 @@ In battery discharge mode, the power reading is replaced by a mAh reading that i
 number of mAh consumed from the battery. This value will be cleared when the mode is changed,
 but will not change when you toggle the output on and off. When turned off and back on, the
 current will reset to 5A
+
+
