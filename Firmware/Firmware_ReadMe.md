@@ -10,8 +10,16 @@ The system features a handful of warnings and errors that will be displayed on t
 
 When triggered, a warning/error will turn off the output. Of these, all but C_SENSE_ERROR can be reset by simply re-enabling the output. C_SENSE_ERROR could indicate a failure of one of the power MOSFETs and can only be disabled via a power cycle. You should proceed with caution by testing the device at ~1A using a current limited supply.
 
-# Library Version Info
-* Arduino ESP32: 2.0.18-arduino.5
-* ESP32_FastPWM: v1.1.0
+# Library & Board Version Info
+* Espressif Systems esp32: v2.0.14
+    * Board: Adafruit Feather ESP32-S3 2MB PSRAM
+    * Add https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json in _Additional Boards Manager_
+* Adafruit BusIO: v1.16.2
 * Adafruit_MCP4725: v2.0.2
+* ESP32_FastPWM: v1.1.0
 * ESP32Encoder: v0.11.6
+* [FlickerFreePrint](https://github.com/KrisKasprzak/FlickerFreePrint) 
+* TFT_eSPI: v2.5.43
+    * Need to overwrite _Arduino\libraries\TFT_eSPI\User_Setup.h_ with the following: [User_Setup.h](User_Setup.h)
+
+
