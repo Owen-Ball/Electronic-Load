@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "FilterBoardLib")(type "KiCad")(uri "${KIPRJMOD}/KiCAD Libraries/FilterBoardLib.kicad_sym")(options "")(descr ""))
+)
