@@ -5,6 +5,125 @@
 	(uuid "5a2b3a91-b284-4bf4-87fa-ab3b35aed5d3")
 	(paper "A4")
 	(lib_symbols
+		(symbol "Connector:Conn_01x01_Pin"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x01_Pin"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x01, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x01_Pin_1_1"
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 0.8636 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Connector:Conn_01x02_Pin"
 			(pin_names
 				(offset 1.016) hide)
@@ -1307,6 +1426,12 @@
 		(uuid "62e98293-7be2-48d5-b7fe-46f9d9eac65c")
 	)
 	(junction
+		(at 220.98 87.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "65258167-a48b-4911-95e9-2d6f0629b9b4")
+	)
+	(junction
 		(at 146.05 115.57)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1341,6 +1466,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8b8be9c3-37fa-470b-be3b-4cb598366b86")
+	)
+	(junction
+		(at 220.98 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8e303484-b4f9-47ca-9d64-49b7332ca665")
 	)
 	(junction
 		(at 172.72 87.63)
@@ -1483,6 +1614,16 @@
 			(type default)
 		)
 		(uuid "05b6a57c-1fd1-4ea3-8d69-35efe6018b6d")
+	)
+	(wire
+		(pts
+			(xy 220.98 87.63) (xy 222.25 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0658ba08-acb5-448c-815c-c233e610d089")
 	)
 	(wire
 		(pts
@@ -1926,7 +2067,7 @@
 	)
 	(wire
 		(pts
-			(xy 204.47 87.63) (xy 222.25 87.63)
+			(xy 204.47 87.63) (xy 220.98 87.63)
 		)
 		(stroke
 			(width 0)
@@ -2026,6 +2167,16 @@
 	)
 	(wire
 		(pts
+			(xy 220.98 83.82) (xy 220.98 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c017e52-5770-4e99-9c9c-4820ec55576b")
+	)
+	(wire
+		(pts
 			(xy 152.4 127) (xy 152.4 129.54)
 		)
 		(stroke
@@ -2086,7 +2237,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 91.44) (xy 220.98 90.17)
+			(xy 220.98 96.52) (xy 220.98 93.98)
 		)
 		(stroke
 			(width 0)
@@ -2316,6 +2467,16 @@
 	)
 	(wire
 		(pts
+			(xy 220.98 83.82) (xy 222.25 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "db9f1a5b-268f-4d56-afd8-bf496a51fbf5")
+	)
+	(wire
+		(pts
 			(xy 57.15 87.63) (xy 69.85 87.63)
 		)
 		(stroke
@@ -2323,6 +2484,26 @@
 			(type default)
 		)
 		(uuid "dbf2fe11-a492-4574-8a61-68e24b3500da")
+	)
+	(wire
+		(pts
+			(xy 220.98 90.17) (xy 220.98 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dde2fa20-c4d9-401b-a978-9d50c0270495")
+	)
+	(wire
+		(pts
+			(xy 220.98 93.98) (xy 222.25 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e07c0f5a-a2c6-437a-a1c1-c9421fe86e3e")
 	)
 	(wire
 		(pts
@@ -2456,7 +2637,7 @@
 		(uuid "2b228448-509a-4b41-9d71-01edccc80486")
 	)
 	(label "VOUT"
-		(at 215.9 87.63 0)
+		(at 214.63 87.63 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2601,6 +2782,71 @@
 			(project "filter_board"
 				(path "/5a2b3a91-b284-4bf4-87fa-ab3b35aed5d3"
 					(reference "C10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Pin")
+		(at 227.33 83.82 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2128bc76-ce54-4785-b761-0535bd82759e")
+		(property "Reference" "J3"
+			(at 229.362 83.566 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x01_Pin"
+			(at 226.695 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "FilterBoardLib:Wire_Pad"
+			(at 227.33 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 227.33 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 227.33 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1fb661a1-4aa6-415d-adab-109cac489e2d")
+		)
+		(instances
+			(project ""
+				(path "/5a2b3a91-b284-4bf4-87fa-ab3b35aed5d3"
+					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -2767,7 +3013,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "FilterBoardLib:Banana_Terminals"
 			(at 227.33 87.63 0)
 			(effects
 				(font
@@ -3438,7 +3684,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 220.98 91.44 0)
+		(at 220.98 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3447,7 +3693,7 @@
 		(fields_autoplaced yes)
 		(uuid "909ae949-891d-49d0-993e-650da1d50e9c")
 		(property "Reference" "#PWR03"
-			(at 220.98 97.79 0)
+			(at 220.98 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3456,7 +3702,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 220.98 96.52 0)
+			(at 220.98 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3464,7 +3710,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 220.98 91.44 0)
+			(at 220.98 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3473,7 +3719,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 220.98 91.44 0)
+			(at 220.98 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3482,7 +3728,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 220.98 91.44 0)
+			(at 220.98 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4605,6 +4851,71 @@
 			(project "filter_board"
 				(path "/5a2b3a91-b284-4bf4-87fa-ab3b35aed5d3"
 					(reference "C9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Pin")
+		(at 227.33 93.98 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "efa3f944-bd2b-4850-b903-919147775063")
+		(property "Reference" "J4"
+			(at 229.362 93.726 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x01_Pin"
+			(at 226.695 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "FilterBoardLib:Wire_Pad"
+			(at 227.33 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 227.33 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 227.33 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "41f4c654-cec9-4291-bc62-9b39b0080674")
+		)
+		(instances
+			(project "filter_board"
+				(path "/5a2b3a91-b284-4bf4-87fa-ab3b35aed5d3"
+					(reference "J4")
 					(unit 1)
 				)
 			)
