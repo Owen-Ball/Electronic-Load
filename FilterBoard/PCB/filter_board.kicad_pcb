@@ -515,7 +515,7 @@
 		(at 167 114.4509 90)
 		(tags "35TGV1000M18X16.5 ")
 		(property "Reference" "C1"
-			(at -13 -6.75 90)
+			(at -11.5491 -6.75 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "ea8d035e-1a5e-4bcc-b11c-ad608bcbd68d")
@@ -983,7 +983,7 @@
 		(at 188 141 -90)
 		(tags "35TGV1000M18X16.5 ")
 		(property "Reference" "C5"
-			(at -13 -6.75 -90)
+			(at -11.3 -7.3 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "e948dc58-f2ba-49b2-9b82-3f697fd83ff1")
@@ -2023,7 +2023,7 @@
 		(at 188 114.4509 90)
 		(tags "35TGV1000M18X16.5 ")
 		(property "Reference" "C2"
-			(at -13 -6.75 90)
+			(at -11.5491 -6.9 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "e32db544-844c-4bc1-8a19-e289ccd36d94")
@@ -2491,7 +2491,7 @@
 		(at 146 140.9509 -90)
 		(tags "35TGV1000M18X16.5 ")
 		(property "Reference" "C3"
-			(at -13 -6.75 -90)
+			(at -11.3509 -7.5 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "01c9ba45-b6e7-45a0-b3ee-861c2bff3d0a")
@@ -3172,7 +3172,7 @@
 		(at 125 141 -90)
 		(tags "35TGV1000M18X16.5 ")
 		(property "Reference" "C7"
-			(at -13 -6.75 -90)
+			(at -11.4 -6.9 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "52089c30-31b8-4143-85f6-42471b781398")
@@ -3640,7 +3640,7 @@
 		(at 167 141 -90)
 		(tags "35TGV1000M18X16.5 ")
 		(property "Reference" "C4"
-			(at -13 -6.75 -90)
+			(at -11.2 -7.2 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "4f38dbd4-ded4-4dab-9095-46a0d15159af")
@@ -4534,7 +4534,7 @@
 		(at 125 114.0491 90)
 		(tags "35TGV1000M18X16.5 ")
 		(property "Reference" "C6"
-			(at -13 -6.75 90)
+			(at -11.6509 -6.8 0)
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "0b37aa8f-8629-4f99-bcec-5acd2c038a06")

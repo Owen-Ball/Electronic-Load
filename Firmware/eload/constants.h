@@ -2,7 +2,7 @@
 #define _CONSTANTS_
 
 enum OUT_STATE {OUT_ON, OUT_OFF};
-enum MODE {CC, CV, CP, CR, BAT};
+enum MODE {CC, CV, CP, CR, BAT, R_CAL};
 enum CURRENT_LIMIT {CURR_LOW, CURR_HIGH};
 
 //NO_ERROR: No error present. Set to this value when output enabled
@@ -22,6 +22,7 @@ enum ERROR_CODE {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERR
 #define MIN_RESISTANCE_SET    0.50
 #define MAX_RESISTANCE_SET    500.00
 #define MAX_POWER_SET         120.00
+#define MAX_CAL_SET           0.5
 
 //Configure default setpoint values
 #define DEFAULT_CC            1.00
@@ -29,7 +30,10 @@ enum ERROR_CODE {NO_ERROR, C_SENSE_ERROR, OVER_C_ERROR, OVER_V_ERROR, OVER_P_ERR
 #define DEFAULT_CP            10.00
 #define DEFAULT_CR            10.00
 #define DEFAULT_BAT           15.30
+#define DEFAULT_RCAL          0.0
 
+//The current that will be injected during calibration
+#define I_CAL                 1.0
 
 //System Limits
 #define CURRENT_LOW_LIMIT     2.00

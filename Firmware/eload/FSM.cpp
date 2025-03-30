@@ -6,7 +6,7 @@ MODE SYSTEM_MODE;
 CURRENT_LIMIT SYSTEM_CURRENT;
 OUT_STATE SYSTEM_OUTPUT;
 float SYSTEM_SETPOINT;
-float SETPOINTS[5];
+float SETPOINTS[6];
 ERROR_CODE ERRORS;
 
 //What the DAC is actually set to. Updated via feedback
@@ -34,6 +34,7 @@ void initSetpoints() {
   SETPOINTS[CP] = DEFAULT_CP;
   SETPOINTS[CR] = DEFAULT_CR;
   SETPOINTS[BAT] = DEFAULT_BAT;
+  SETPOINTS[R_CAL] = DEFAULT_RCAL;
 }
 
 void initSystem() {
@@ -87,6 +88,10 @@ void updateMode() {
       SYSTEM_MODE = BAT;
       break;
     case BAT:
+      SYSTEM_OUTPUT = OUT_OFF;
+      SYSTEM_MODE = R_CAL;
+      break;
+    case R_CAL:
       SYSTEM_OUTPUT = OUT_OFF;
       SYSTEM_MODE = CC;
       break;
@@ -147,6 +152,9 @@ void updateSetpoint() {
     case BAT:
       SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_VOLTAGE_SET);
       break;
+    case R_CAL:
+      SYSTEM_SETPOINT = limitFloat(SYSTEM_SETPOINT, 0, MAX_CAL_SET);
+      break;
   }
 }
 
@@ -185,6 +193,9 @@ void runMode() {
         break; 
       case BAT:
         runBAT();
+        break;
+      case R_CAL:
+        runCAL();
         break;
     }
 }
@@ -237,6 +248,16 @@ void runBAT() {
   updateCurrent();  
 }
 
+
+void runCAL() {
+  SYSTEM_CURRENT_SETPOINT = I_CAL;
+  updateCurrent();  
+
+  //Other functions will use this, so store it even before switching modes
+  SETPOINTS[R_CAL] = SYSTEM_SETPOINT;
+}
+
+
 void updateCurrent() {;
   long timer = millis() - OUT_KILL_TIMER;
   if (SYSTEM_CURRENT_SETPOINT < .75*I_READING || SYSTEM_CURRENT_SETPOINT > 1.25*I_READING) {
@@ -271,6 +292,7 @@ void readVandI() {
   //Therefore we don't know if this current is flowing or not (ie if a source is connected)
   //So we assume if there is almost no voltage measured, there is nothing connected
   if (V_READING < .01) I_READING = 0.0;
+
 }
 
 void setCurrent() {
@@ -279,14 +301,7 @@ void setCurrent() {
 }
 
 void filterMeasurements(float v, float i) {
-  float v_error;
-  if (v == 0) v_error = 0;
-  else v_error = abs((v - filtered_voltage) / v);
-  if (v_error < FILTER_THRESHOLD) {
-    filtered_voltage = MEASUREMENT_FILTER*filtered_voltage + (1 - MEASUREMENT_FILTER)*v;
-  } else {
-    filtered_voltage = v;
-  }
+
   float i_error;
   if (i == 0) i_error = 0;
   else i_error = abs((i - filtered_current) / i);
@@ -294,5 +309,16 @@ void filterMeasurements(float v, float i) {
     filtered_current = MEASUREMENT_FILTER*filtered_current + (1 - MEASUREMENT_FILTER)*i;
   } else {
     filtered_current = i;
+  }
+
+  v += filtered_current * SETPOINTS[R_CAL];
+
+  float v_error;
+  if (v == 0) v_error = 0;
+  else v_error = abs((v - filtered_voltage) / v);
+  if (v_error < FILTER_THRESHOLD) {
+    filtered_voltage = MEASUREMENT_FILTER*filtered_voltage + (1 - MEASUREMENT_FILTER)*v;
+  } else {
+    filtered_voltage = v;
   }
 }

@@ -21,7 +21,7 @@ This section provides a brief overview of device operation, including
 * Some potential pitfalls and things to look out for using the device
 * Proper power connections and USB-C connections
 ## UI Overview
-There are 4 "screens" on the UI, corresponding to the 4 operating modes of the device. These are cycled through with the "mode" (M) button. The current mode is indicated in the top left. On each screen, the output can be enabled with the "enable" (E) button.
+There are 5 "screens" on the UI, corresponding to the 4 operating modes of the device and a calibration screen. These are cycled through with the "mode" (M) button. The current mode is indicated in the top left. On each screen, the output can be enabled with the "enable" (E) button.
 
 On each screen, the top-most value is the setpoint for the mode. This value is changed via the encoder. The 3 values below this are the measured values, which consist of the voltage, current, and either the power or discharged mAh in the case of battery mode. The temperature is also displayed at the bottom, along with any error messages. The output state is indicated by a red (off) or green (on) circle in the bottom right.
 

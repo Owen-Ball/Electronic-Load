@@ -39,6 +39,7 @@ void runCP();
 void runCR();
 void runCV();
 void runBAT();
+void runCAL();
 
 void readVandI();
 void setCurrent();

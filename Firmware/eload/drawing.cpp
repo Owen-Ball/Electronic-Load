@@ -55,8 +55,12 @@ void printSetpoint(float setpoint, uint8_t digit) {
     strncpy(mode_text, "BT: ", 4);
     unit = 'V';
     break;
+  case R_CAL:
+    strncpy(mode_text, "CL: ", 4);
+    unit = ' ';
+    break;
   }
-  if (SYSTEM_MODE == CR) {
+  if (SYSTEM_MODE == CR || SYSTEM_MODE == R_CAL) {
     tft.drawXBitmap(LETTER_X + 225, LETTER_Y - 30, omega, ohmWidth, ohmHeight, TFT_YELLOW);
     omega_drawn = true;
   }
@@ -254,7 +258,7 @@ void drawAll() {
   } else {
     if (!displayingPower) clearPower();
     displayingPower = true;
-    printPower(V_READING*I_READING);
+    printPower(filtered_voltage*filtered_current);
   }
   #ifndef DEBUG
     printErrorMsg();
