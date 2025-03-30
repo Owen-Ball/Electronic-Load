@@ -64,7 +64,7 @@ number of mAh consumed from the battery. This value will be cleared when the mod
 but will not change when you toggle the output on and off. When turned off and back on, the
 current will reset to 5A
 
-## Battery Discharge Mode
+## Calibration Mode
 This mode is used to account for resistive drops in the Eload and wires. This mode will set the current to 1A 
 when the output is enabled. The resistance value shown can be changed until the voltage measured by the Eload 
 matches with the voltage measured at the desired location with a kelvin connected voltmeter. The resistance value
