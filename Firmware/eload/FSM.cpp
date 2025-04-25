@@ -285,7 +285,7 @@ void readVandI() {
     SYSTEM_OUTPUT = OUT_OFF;
     ERRORS = C_SENSE_ERROR;
   }
-  V_READING = readVoltage();
+  V_READING = readVoltage() + I_READING * SETPOINTS[R_CAL];
 
   //There is around 8-12mA of leakage current even when the output is off
   //This is not able to be measured by the current sensor bc it flows through a different path
@@ -310,8 +310,6 @@ void filterMeasurements(float v, float i) {
   } else {
     filtered_current = i;
   }
-
-  v += filtered_current * SETPOINTS[R_CAL];
 
   float v_error;
   if (v == 0) v_error = 0;
